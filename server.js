@@ -9,6 +9,8 @@ const app = express();
 const server = http.createServer(app);
 const io = socketIO(server);
 
+const messageRoutes = require("./routes/messageRoutes");
+
 app.set("view engine", ejs);
 app.use(express.static(public));
 
@@ -18,7 +20,7 @@ mongoose
   .catch((err) => console.error("Connection error:", err));
 
 app.get("/", (req, res) => {
-  res.render("index");
+  res.render("index", { pageTitle: "Home-Chatroom" });
 });
 
 const port = process.env.port || 3009;
