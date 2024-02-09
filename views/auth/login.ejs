@@ -38,10 +38,10 @@
 
     <p class="auth-msg">
       Create a New Account?
-      <a href="/signup"> Sign up </a>
+      <a href="/users/signup"> Sign up </a>
     </p>
 
-    <form action="/login" method="POST">
+    <form action="/users/login" method="POST">
       <div class="input-container">
         <label for="username">Username: </label>
         <input
@@ -69,6 +69,7 @@
       <% } %> <% if (logout === "success") { %>
       <p class="success-message">You've successfully logged out!</p>
       <% } %>
+
     </form>
   </div>
 </div>

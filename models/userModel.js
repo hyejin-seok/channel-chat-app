@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
-// const connectAuthDB = require("../src/authDB");
 const { connectDBs } = require("../src/db");
+// const connectAuthDB = require("../src/authDB");
 
 const { authDB } = connectDBs();
 

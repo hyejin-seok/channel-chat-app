@@ -3,9 +3,7 @@ require("dotenv").config();
 const express = require("express");
 const http = require("http");
 const initSocketServer = require("./socketServer");
-
-const messageRoutes = require("./routes/messageRoutes");
-const userRoutes = require("./routes/userRoutes");
+const path = require("path");
 
 const app = express();
 const server = http.createServer(app);
@@ -13,16 +11,20 @@ const server = http.createServer(app);
 app.set("view engine", "ejs");
 app.use(express.json());
 app.use(express.static("public"));
+app.use(express.urlencoded({ extended: false })); // middleware to parse incoming requests with URL-encoded payloads.
+
+const messageRoutes = require("./routes/messageRoutes");
+const userRoutes = require("./routes/userRoutes");
 
 // app.set("views", path.join(__dirname, "views"));
-// app.use(express.urlencoded({ detended: false }));
 
 app.get("/", (req, res) => {
   res.render("index", { pageTitle: "Home-Chatroom" });
+  // res.render("auth/login", { pageTitle: "Login" });
 });
 
-app.use("/messages", messageRoutes);
 app.use("/users", userRoutes);
+app.use("/messages", messageRoutes);
 
 initSocketServer(server);
 
