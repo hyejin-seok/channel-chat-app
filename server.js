@@ -2,14 +2,13 @@ require("dotenv").config();
 
 const express = require("express");
 const http = require("http");
-const socketIO = require("socket.io");
+const initSocketServer = require("./socketServer");
 
 const messageRoutes = require("./routes/messageRoutes");
 const userRoutes = require("./routes/userRoutes");
 
 const app = express();
 const server = http.createServer(app);
-const io = socketIO(server);
 
 app.set("view engine", "ejs");
 app.use(express.json());
@@ -25,52 +24,10 @@ app.get("/", (req, res) => {
 app.use("/messages", messageRoutes);
 app.use("/users", userRoutes);
 
-io.on("connection", (socket) => {
-  console.log("A user has connected");
+initSocketServer(server);
 
-  socket.on("disconnect", () => {
-    console.log("User disconnected");
-  });
+const port = process.env.PORT || 3007;
 
-  // Join room
-  socket.on("join room", (data) => {
-    socket.join(data.room);
-    console.log(`${data.user} joined ${data.room}`);
-    socket.username = data.user;
-
-    // Send message to all clients in room
-    io.to(data.room).emit("chat message", {
-      msg: `${data.user} has joined the room`,
-      user: "System",
-      room: data.room,
-    });
-  });
-
-  // Leave room
-  socket.on("leave room", (room) => {
-    socket.leave(room);
-    console.log(`${socket.username} has left ${room}`);
-
-    // Send message to all clients in room
-    io.to(room).emit("chat message", {
-      msg: `${socket.username} has left the room`,
-      user: "System",
-      room: room,
-    });
-  });
-
-  socket.on("chat message", (data) => {
-    // data is from the client
-    io.emit("chat message", {
-      msg: data.msg,
-      user: data.user,
-      room: data.room,
-    }); // Sending this to all connected clients
-  });
-});
-
-const port = process.env.port || 3009;
-
-app.listen(port, () => {
+server.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });

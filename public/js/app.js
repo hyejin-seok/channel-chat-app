@@ -7,19 +7,22 @@ document.addEventListener("DOMContentLoaded", function () {
   const roomSelect = document.querySelector("#room");
   let currentRoom = "";
 
-  (input.disabled = true),
-    (form.querySelector("button").disabled = true),
-    roomSelect.addEventListener("change", function () {
-      if (this.value) {
-        input.disabled = false;
-        form.querySelector("button").disabled = false;
-        joinRoom(this.value);
-      } else {
-        (input.disabled = true),
-          (form.querySelector("button").disabled = true),
-          leaveRoom();
-      }
-    });
+  input.disabled = true;
+  form.querySelector("button").disabled = true;
+
+  roomSelect.addEventListener("change", function () {
+    if (this.value) {
+      input.disabled = false;
+      form.querySelector("button").disabled = false;
+
+      leaveRoom();
+      joinRoom(this.value);
+    } else {
+      input.disabled = true;
+      form.querySelector("button").disabled = true;
+      leaveRoom();
+    }
+  });
 
   function joinRoom(newRoom) {
     currentRoom = newRoom;
