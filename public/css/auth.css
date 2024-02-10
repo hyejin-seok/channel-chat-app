@@ -1,7 +1,7 @@
 @import 'variables.css';
 
 .auth-container {
-    background-color: var(--box-color);
+    background-color: var(--sidebar-color);
     padding: 20px;
     border-radius: 5px;
     box-shadow: 0 0 20px rgba(255, 255, 255, 0.2); 

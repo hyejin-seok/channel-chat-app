@@ -3,7 +3,6 @@ document.addEventListener("DOMContentLoaded", function () {
   const form = document.querySelector("#form");
   const input = document.querySelector("#input");
   const messages = document.querySelector("#messages");
-  // const username = document.querySelector("#username");
   const roomButtons = document.querySelectorAll(".room");
 
   let currentRoom = "";
@@ -14,7 +13,7 @@ document.addEventListener("DOMContentLoaded", function () {
   roomButtons.forEach((roomButton) => {
     roomButton.addEventListener("click", function () {
       // Logic to handle room selection
-      const roomName = this.textContent.trim(); // Get the room name from button text
+      const roomName = this.value; // Get the room name from button text
       if (roomName) {
         input.disabled = false;
         form.querySelector("button").disabled = false;
@@ -30,7 +29,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   function joinRoom(newRoom) {
     currentRoom = newRoom;
-    socket.emit("join room", { room: newRoom, user: username.value });
+    socket.emit("join room", { room: newRoom, user: username });
     messages.innerHTML = "";
   }
 
@@ -44,10 +43,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
   form.addEventListener("submit", function (e) {
     e.preventDefault();
-    if (input.value && username.value) {
+    if (input.value && username) {
       socket.emit("chat message", {
         msg: input.value,
-        user: username.value,
+        user: username,
         room: currentRoom,
       });
       input.value = "";
@@ -58,8 +57,17 @@ document.addEventListener("DOMContentLoaded", function () {
   socket.on("chat message", function (data) {
     if (data.room === currentRoom) {
       const item = document.createElement("li");
-      item.textContent = `${data.user}: ${data.msg}`;
+      item.textContent = `${username}: ${data.msg}`;
       messages.appendChild(item);
     }
+  });
+});
+
+// Handle chat history event
+socket.on("chat history", function (messages) {
+  messages.forEach((message) => {
+    const item = document.createElement("li");
+    item.textContent = `${message.sender.username}: ${message.message.text}`;
+    messages.appendChild(item);
   });
 });

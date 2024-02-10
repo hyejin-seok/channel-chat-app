@@ -2,6 +2,7 @@ require("dotenv").config();
 
 const express = require("express");
 const http = require("http");
+const session = require("express-session");
 const initSocketServer = require("./socketServer");
 const path = require("path");
 
@@ -27,13 +28,36 @@ const userRoutes = require("./routes/userRoutes");
 
 app.set("views", path.join(__dirname, "views"));
 
-app.get("/", (req, res) => {
-  res.render("index", { pageTitle: "Home-Chatroom" });
+// Middleware to pass username session to routes
+// app.use((req, res, next) => {
+//   res.locals.username = req.session.username;
+//   next();
+// });
+
+// Middleware to check if user is authenticated
+const authenticateUser = (req, res, next) => {
+  if (!req.session.username) {
+    return res.redirect("/users/login"); // Redirect to login page if user is not authenticated
+  }
+  next(); // Proceed to the next middleware or route handler
+};
+
+app.get("/", authenticateUser, (req, res) => {
+  console.log("Username in session:", req.session.username);
+  res.render("index", {
+    pageTitle: "Home-Chatroom",
+    username: req.session.username,
+  });
   // res.render("auth/login", { pageTitle: "Login" });
 });
 
 app.use("/users", userRoutes);
 app.use("/messages", messageRoutes);
+
+// Catch-all route for invalid requests
+app.use((req, res) => {
+  res.status(404).send("Page not found");
+});
 
 initSocketServer(server);
 
