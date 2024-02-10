@@ -3,29 +3,25 @@ document.addEventListener("DOMContentLoaded", function () {
   const form = document.querySelector("#form");
   const input = document.querySelector("#input");
   const messages = document.querySelector("#messages");
-  // const username = document.querySelector("#username");
-  const roomButtons = document.querySelectorAll(".room");
-
+  const username = document.querySelector("#username");
+  const roomSelect = document.querySelector("#room");
   let currentRoom = "";
 
   input.disabled = true;
   form.querySelector("button").disabled = true;
 
-  roomButtons.forEach((roomButton) => {
-    roomButton.addEventListener("click", function () {
-      // Logic to handle room selection
-      const roomName = this.textContent.trim(); // Get the room name from button text
-      if (roomName) {
-        input.disabled = false;
-        form.querySelector("button").disabled = false;
-        leaveRoom();
-        joinRoom(roomName);
-      } else {
-        input.disabled = true;
-        form.querySelector("button").disabled = true;
-        leaveRoom();
-      }
-    });
+  roomSelect.addEventListener("change", function () {
+    if (this.value) {
+      input.disabled = false;
+      form.querySelector("button").disabled = false;
+
+      leaveRoom();
+      joinRoom(this.value);
+    } else {
+      input.disabled = true;
+      form.querySelector("button").disabled = true;
+      leaveRoom();
+    }
   });
 
   function joinRoom(newRoom) {

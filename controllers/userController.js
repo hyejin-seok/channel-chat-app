@@ -1,5 +1,6 @@
 const User = require("../models/userModel");
 const bcrypt = require("bcrypt");
+const session = require("express-session");
 // const cookieParser = require("cookie-parser");
 
 // Signup Page
@@ -19,7 +20,7 @@ const signupLogic = async (req, res) => {
     const existingUser = await User.findOne({ username: data.name });
     if (existingUser) {
       return res.send(
-        "User already exists. Please choose a different username"
+        "Username already exists. Please choose a different username"
       );
     }
 
@@ -57,7 +58,8 @@ const loginLogic = async (req, res) => {
   try {
     const check = await User.findOne({ username: req.body.username });
     if (!check) {
-      return res.status(404).json({ message: "Item not found" });
+      // return res.status(404).json({ message: "Item not found" });
+      return res.redirect("/users/login?error=1");
     }
     // compare the has password from the database with the plain text
     const isPsswordMatch = await bcrypt.compare(
@@ -65,6 +67,8 @@ const loginLogic = async (req, res) => {
       check.password
     );
     if (isPsswordMatch) {
+      // Store the username in the session
+      req.session.username = req.body.username;
       // res.render("index", { pageTitle: "Home - Chatroom" });
       res.redirect("/");
     } else {

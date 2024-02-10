@@ -12,11 +12,20 @@ app.set("view engine", "ejs");
 app.use(express.json());
 app.use(express.static("public"));
 app.use(express.urlencoded({ extended: false })); // middleware to parse incoming requests with URL-encoded payloads.
+// Set up session middleware
+app.use(
+  session({
+    secret: "kalsjdfajdsjf", // Change this to a random string (used to sign the session ID cookie)
+    resave: false, // Avoids saving session if not modified
+    saveUninitialized: false, // Avoids creating sessions for unauthenticated users
+    // Other options...
+  })
+);
 
 const messageRoutes = require("./routes/messageRoutes");
 const userRoutes = require("./routes/userRoutes");
 
-// app.set("views", path.join(__dirname, "views"));
+app.set("views", path.join(__dirname, "views"));
 
 app.get("/", (req, res) => {
   res.render("index", { pageTitle: "Home-Chatroom" });
