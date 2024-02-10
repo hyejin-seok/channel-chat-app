@@ -1,24 +1,24 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+
 body {
-    margin: 0;
-    padding: 0;
+    height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
-    background-color: #f4f4f4;
+    /* background-color: #f4f4f4; */
+    /* background-color: var(--bg-color); */
     font-family: Arial, Helvetica, sans-serif;
-  }
+    color: var(--font-color);
+ }
   
-  .container {
-    width: 80%;
-    max-width: 600px;
-    background-color: white;
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0,0,0,.1);
-    overflow: hidden;
-  }
   
-  #messages {
+  
+  /* #messages {
     display: flex;
     flex-direction: column;
     justify-content: end;
@@ -27,42 +27,29 @@ body {
     height: 300px;
     overflow-y: auto;
     border-bottom: 2px solid #eee;
-  }
+  } */
   
-  #messages li {
+  /* #messages li {
     padding: 5px 10px;
     background: #f9f9f9;
     margin-bottom: 10px;
     border-radius: 4px;
-  }
+  } */
   
-  #form {
-    display: flex;
-    padding: 10px;
-  }
-  
-  #username, #input {
-    padding: 10px;
-    margin: 0 10px 0 0;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    flex: 1;
-  }
-  
-  #username {
-    flex: 0 0 150px;
-  }
-  
+
   button {
     padding: 10px 20px;
     border: none;
-    border-radius: 4px;
-    background-color: #007bff;
-    color: white;
+    border-radius: 5px;
+    background-color: var(--btn-color);
+    color: var(--font-color);
     cursor: pointer;
     transition: background-color .3s ease-in-out;
+    font-size: 1rem;
   }
   
   button:hover {
-    background-color: #0056b3;
+    background-color: var(--font-color);
+    color: var(--btn-color);
+
   }

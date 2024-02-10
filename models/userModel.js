@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
-// const connectAuthDB = require("../src/authDB");
 const { connectDBs } = require("../src/db");
+// const connectAuthDB = require("../src/authDB");
 
 const { authDB } = connectDBs();
 
@@ -8,6 +8,7 @@ const userSchema = new mongoose.Schema({
   username: {
     type: String,
     required: true,
+    unique: true,
   },
   password: {
     type: String,

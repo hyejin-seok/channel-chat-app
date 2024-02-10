@@ -3,33 +3,30 @@ document.addEventListener("DOMContentLoaded", function () {
   const form = document.querySelector("#form");
   const input = document.querySelector("#input");
   const messages = document.querySelector("#messages");
-  const roomButtons = document.querySelectorAll(".room");
-
+  const username = document.querySelector("#username");
+  const roomSelect = document.querySelector("#room");
   let currentRoom = "";
 
   input.disabled = true;
   form.querySelector("button").disabled = true;
 
-  roomButtons.forEach((roomButton) => {
-    roomButton.addEventListener("click", function () {
-      // Logic to handle room selection
-      const roomName = this.value; // Get the room name from button text
-      if (roomName) {
-        input.disabled = false;
-        form.querySelector("button").disabled = false;
-        leaveRoom();
-        joinRoom(roomName);
-      } else {
-        input.disabled = true;
-        form.querySelector("button").disabled = true;
-        leaveRoom();
-      }
-    });
+  roomSelect.addEventListener("change", function () {
+    if (this.value) {
+      input.disabled = false;
+      form.querySelector("button").disabled = false;
+
+      leaveRoom();
+      joinRoom(this.value);
+    } else {
+      input.disabled = true;
+      form.querySelector("button").disabled = true;
+      leaveRoom();
+    }
   });
 
   function joinRoom(newRoom) {
     currentRoom = newRoom;
-    socket.emit("join room", { room: newRoom, user: username });
+    socket.emit("join room", { room: newRoom, user: username.value });
     messages.innerHTML = "";
   }
 
@@ -43,10 +40,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
   form.addEventListener("submit", function (e) {
     e.preventDefault();
-    if (input.value && username) {
+    if (input.value && username.value) {
       socket.emit("chat message", {
         msg: input.value,
-        user: username,
+        user: username.value,
         room: currentRoom,
       });
       input.value = "";
@@ -57,17 +54,8 @@ document.addEventListener("DOMContentLoaded", function () {
   socket.on("chat message", function (data) {
     if (data.room === currentRoom) {
       const item = document.createElement("li");
-      item.textContent = `${username}: ${data.msg}`;
+      item.textContent = `${data.user}: ${data.msg}`;
       messages.appendChild(item);
     }
-  });
-});
-
-// Handle chat history event
-socket.on("chat history", function (messages) {
-  messages.forEach((message) => {
-    const item = document.createElement("li");
-    item.textContent = `${message.sender.username}: ${message.message.text}`;
-    messages.appendChild(item);
   });
 });

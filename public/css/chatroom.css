@@ -1,0 +1,35 @@
+.chat-container {
+    /* background-color: var(--bg-color); */
+    display: grid;
+    grid-template-rows: 85% 15%;
+    /* border: 1px solid yellow; */
+}
+
+.chatroom-wrapper {
+    padding: 20px;
+    /* border: 1px solid yellow; */
+}
+
+.form-wrapper {
+    border: 1px solid green;
+    /* width: 90%; */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 5px;
+}
+ 
+#form {
+    width: 95%;
+    height: 65px;
+    display: flex;
+    padding: 10px;
+  }
+  
+  #input {
+    padding: 10px;
+    margin: 0 10px 0 0;
+    /* border: 1px solid #ddd; */
+    border-radius: 5px;
+    flex: 1;
+  }

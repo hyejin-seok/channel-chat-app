@@ -1,22 +1,43 @@
 const Message = require("../models/messageModel");
+const User = require("../models/userModel");
 
-// GET ALL messages
-const getAllMessages = async (req, res) => {
+// GET messages for a specific room
+const getRoomMessages = async (req, res) => {
   try {
-    const messages = await Message.find();
+    const room = req.params.room; // Get the room from request parameters
+    const messages = await Message.find({ room: room }) // Find messages for the specified room
+      .populate("sender", "username") // Populate sender field with username
+      .exec();
     res.json(messages);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
 };
 
-// ADD message
-const createMessage = async (req, res) => {
+// ADD message to a specific room
+const createRoomMessage = async (req, res) => {
   try {
+    const { room, text } = req.body; // Extract room and text from request body
+    const username = req.session.username;
+
+    // Check if the user is logged in (username is available in session)
+    if (!username) {
+      return res.status(401).json({ message: "User not authenticated" });
+    }
+
+    // Find the user document based on the username
+    const user = await User.findOne({ username });
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    // Create the new message
     const newMessage = new Message({
-      user: req.body.user,
-      text: req.body.text,
+      message: { text: text },
+      sender: user._id,
+      room: room,
     });
+
+    // Save the new message
     const addedMessage = await newMessage.save();
     res.json(addedMessage);
   } catch (err) {
@@ -25,6 +46,6 @@ const createMessage = async (req, res) => {
 };
 
 module.exports = {
-  getAllMessages,
-  createMessage,
+  getRoomMessages,
+  createRoomMessage,
 };

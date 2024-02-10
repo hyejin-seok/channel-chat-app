@@ -2,7 +2,7 @@
 
 <div class="container">
   <div class="auth-container">
-    <h1>Login</h1>
+    <h1>LOGIN</h1>
     <div class="auth-icon-box">
       <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path
@@ -38,10 +38,10 @@
 
     <p class="auth-msg">
       Create a New Account?
-      <a href="/signup"> Sign up </a>
+      <a href="/users/signup"> SIGN UP </a>
     </p>
 
-    <form action="/login" method="POST">
+    <form action="/users/login" method="POST">
       <div class="input-container">
         <label for="username">Username: </label>
         <input
@@ -62,13 +62,14 @@
           required
         />
       </div>
-      <button type="submit">Login</button>
+      <button type="submit">LOGIN</button>
 
       <% if (error === "1") { %>
       <p class="error-message">Invalid login details</p>
       <% } %> <% if (logout === "success") { %>
       <p class="success-message">You've successfully logged out!</p>
       <% } %>
+
     </form>
   </div>
 </div>
