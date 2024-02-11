@@ -3,29 +3,30 @@ document.addEventListener("DOMContentLoaded", function () {
   const form = document.querySelector("#form");
   const input = document.querySelector("#input");
   const messages = document.querySelector("#messages");
-  const roomButtons = document.querySelectorAll(".room");
+  // const roomButtons = document.querySelectorAll(".room");
 
   let currentRoom = "";
 
   input.disabled = true;
   form.querySelector("button").disabled = true;
 
-  roomButtons.forEach((roomButton) => {
-    roomButton.addEventListener("click", function () {
-      // Logic to handle room selection
-      const roomName = this.value; // Get the room name from button text
-      if (roomName) {
-        input.disabled = false;
-        form.querySelector("button").disabled = false;
-        leaveRoom();
-        joinRoom(roomName);
-      } else {
-        input.disabled = true;
-        form.querySelector("button").disabled = true;
-        leaveRoom();
-      }
-    });
-  });
+  // roomButtons.forEach((roomButton) => {
+  //   roomButton.addEventListener("click", function () {
+  //     // Logic to handle room selection
+  //     const roomName = this.value; // Get the room name from button text
+  //     console.log(">>> room value", roomName);
+  //     if (roomName) {
+  //       input.disabled = false;
+  //       form.querySelector("button").disabled = false;
+  //       leaveRoom();
+  //       joinRoom(roomName);
+  //     } else {
+  //       input.disabled = true;
+  //       form.querySelector("button").disabled = true;
+  //       leaveRoom();
+  //     }
+  //   });
+  // });
 
   function joinRoom(newRoom) {
     currentRoom = newRoom;
@@ -69,6 +70,43 @@ document.addEventListener("DOMContentLoaded", function () {
       const item = document.createElement("li");
       item.textContent = `${message.sender.username}: ${message.message.text}`;
       messages.appendChild(item);
+    });
+  });
+
+  const getRooms = async () => {
+    const response = await fetch("http://localhost:3007/rooms");
+    const rooms = await response.json();
+    return rooms;
+  };
+
+  getRooms().then((allRooms) => {
+    // console.log(">>> allRooms", allRooms);
+    allRooms.forEach((room) => {
+      document
+        .querySelector(".room-wrapper")
+        .insertAdjacentHTML(
+          "beforeend",
+          `<button class="room" value="${room._id}">${room.name}</button>`
+        );
+    });
+
+    const roomButtons = document.querySelectorAll(".room");
+    roomButtons.forEach((roomButton) => {
+      roomButton.addEventListener("click", function () {
+        // Logic to handle room selection
+        const roomId = this.value; // Get the room name from button text
+        console.log(">>> room value", roomId);
+        if (roomId) {
+          input.disabled = false;
+          form.querySelector("button").disabled = false;
+          leaveRoom();
+          joinRoom(roomId);
+        } else {
+          input.disabled = true;
+          form.querySelector("button").disabled = true;
+          leaveRoom();
+        }
+      });
     });
   });
 });

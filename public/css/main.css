@@ -11,7 +11,7 @@ body {
     justify-content: center;
     align-items: center;
     /* background-color: #f4f4f4; */
-    /* background-color: var(--bg-color); */
+    background-color: var(--out-color);
     font-family: Arial, Helvetica, sans-serif;
     color: var(--font-color);
  }

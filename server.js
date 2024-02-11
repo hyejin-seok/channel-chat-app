@@ -25,6 +25,7 @@ app.use(
 
 const messageRoutes = require("./routes/messageRoutes");
 const userRoutes = require("./routes/userRoutes");
+const roomRoutes = require("./routes/roomRoutes");
 
 app.set("views", path.join(__dirname, "views"));
 
@@ -52,8 +53,8 @@ app.get("/", authenticateUser, (req, res) => {
 });
 
 app.use("/users", userRoutes);
-app.use("/messages", authenticateUser, messageRoutes);
-// app.use("/", messageRoutes);
+app.use("/messages", messageRoutes);
+app.use("/rooms", roomRoutes);
 
 // Catch-all route for invalid requests
 app.use((req, res) => {
