@@ -1,8 +1,14 @@
 const Message = require("../models/messageModel");
 const User = require("../models/userModel");
 
+// chatRoom Page
+const chatRoom = (req, res) => {
+  res.render("chatRoom", { pageTitle: "ChatRoom" });
+};
+
 // GET messages for a specific room
 const getRoomMessages = async (req, res) => {
+  console.log(">>> getRoomMessages");
   try {
     const room = req.params.room; // Get the room from request parameters
     const messages = await Message.find({ room: room }) // Find messages for the specified room
@@ -16,6 +22,7 @@ const getRoomMessages = async (req, res) => {
 
 // ADD message to a specific room
 const createRoomMessage = async (req, res) => {
+  console.log(">>> createRoomMessage");
   try {
     const { room, text } = req.body; // Extract room and text from request body
     const username = req.session.username;
@@ -30,6 +37,7 @@ const createRoomMessage = async (req, res) => {
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
+
     // Create the new message
     const newMessage = new Message({
       message: { text: text },
@@ -46,6 +54,7 @@ const createRoomMessage = async (req, res) => {
 };
 
 module.exports = {
+  chatRoom,
   getRoomMessages,
   createRoomMessage,
 };

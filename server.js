@@ -29,10 +29,10 @@ const userRoutes = require("./routes/userRoutes");
 app.set("views", path.join(__dirname, "views"));
 
 // Middleware to pass username session to routes
-// app.use((req, res, next) => {
-//   res.locals.username = req.session.username;
-//   next();
-// });
+app.use((req, res, next) => {
+  res.locals.username = req.session.username;
+  next();
+});
 
 // Middleware to check if user is authenticated
 const authenticateUser = (req, res, next) => {
@@ -46,13 +46,14 @@ app.get("/", authenticateUser, (req, res) => {
   console.log("Username in session:", req.session.username);
   res.render("index", {
     pageTitle: "Home-Chatroom",
-    username: req.session.username,
+    // username: req.session.username,
   });
   // res.render("auth/login", { pageTitle: "Login" });
 });
 
 app.use("/users", userRoutes);
-app.use("/messages", messageRoutes);
+app.use("/messages", authenticateUser, messageRoutes);
+// app.use("/", messageRoutes);
 
 // Catch-all route for invalid requests
 app.use((req, res) => {

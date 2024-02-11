@@ -55,6 +55,7 @@ const login = (req, res) => {
 
 // Login Logic
 const loginLogic = async (req, res) => {
+  console.log(">>> loginLogic");
   try {
     const check = await User.findOne({ username: req.body.username });
     if (!check) {
@@ -70,7 +71,7 @@ const loginLogic = async (req, res) => {
       // Store the username in the session
       req.session.username = req.body.username;
       // res.render("index", { pageTitle: "Home - Chatroom" });
-      res.redirect("/");
+      res.redirect("/messages");
     } else {
       res.redirect("/users/login?error=1");
       // res.status(401).send("Wrong password");

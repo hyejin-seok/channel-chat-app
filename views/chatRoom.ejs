@@ -1,0 +1,33 @@
+<%- include("partials/header", {pageTitle}) %>
+<div class="home-section">
+  <div class="home-container">
+    <div class="sidebar-container">
+    <%- include("partials/sidebar") %>
+    </div>
+
+
+    <div class="chat-container">
+      <div class="chatroom-wrapper">
+        <ul id="messages"></ul>
+      </div>
+
+      <div class="form-wrapper">
+        <form id="form" action="">
+          <input type="text" id="input" autocomplete="off" placeholder="Write something..." />
+          <button>Send Message</button>
+        </form>
+      </div>
+    </div>
+    
+
+  </div>
+</div>
+  
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.4/socket.io.js"></script>
+<script src="/js/app.js"></script>
+<script>
+  const username = "<%= username %>";
+</script>
+
+
+<%- include("partials/footer") %>

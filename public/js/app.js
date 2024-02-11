@@ -58,16 +58,17 @@ document.addEventListener("DOMContentLoaded", function () {
     if (data.room === currentRoom) {
       const item = document.createElement("li");
       item.textContent = `${username}: ${data.msg}`;
+      console.log(">>> here");
       messages.appendChild(item);
     }
   });
-});
 
-// Handle chat history event
-socket.on("chat history", function (messages) {
-  messages.forEach((message) => {
-    const item = document.createElement("li");
-    item.textContent = `${message.sender.username}: ${message.message.text}`;
-    messages.appendChild(item);
+  // Handle chat history event
+  socket.on("chat history", function (messages) {
+    messages.forEach((message) => {
+      const item = document.createElement("li");
+      item.textContent = `${message.sender.username}: ${message.message.text}`;
+      messages.appendChild(item);
+    });
   });
 });
