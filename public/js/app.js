@@ -1,8 +1,11 @@
+// const messageRoutes = require("./routes/messageRoutes");
+
 document.addEventListener("DOMContentLoaded", function () {
   const socket = io();
   const form = document.querySelector("#form");
   const input = document.querySelector("#input");
   const messages = document.querySelector("#messages");
+
   // const roomButtons = document.querySelectorAll(".room");
 
   let currentRoom = "";
@@ -28,20 +31,30 @@ document.addEventListener("DOMContentLoaded", function () {
   //   });
   // });
 
+  // roomId, user (1send...client -> server)
   function joinRoom(newRoom) {
     currentRoom = newRoom;
     socket.emit("join room", { room: newRoom, user: username });
-    messages.innerHTML = "";
   }
+
+  //     // Redirect the user to a different page
+  //     window.location.href = "/messages/" + newRoom; // Redirect to a URL representing the room
+  //     // window.location.replace(`/messages/${newRoom}`);
+  //   }
+  // });
 
   function leaveRoom() {
     if (currentRoom) {
+      console.log(">>> leave room??");
       socket.emit("leave room", currentRoom);
       currentRoom = "";
+
+      // Maybe need maybe not??
       messages.innerHTML = "";
     }
   }
 
+  // msg, user, roomId (서버로 보내는 것들)
   form.addEventListener("submit", function (e) {
     e.preventDefault();
     if (input.value && username) {
@@ -54,24 +67,25 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 
-  // data.msg data.user data.room
+  // msg, user, roomId
   socket.on("chat message", function (data) {
     if (data.room === currentRoom) {
       const item = document.createElement("li");
-      item.textContent = `${username}: ${data.msg}`;
-      console.log(">>> here");
+      item.textContent = `${data.user}: ${data.msg}`;
+      console.log(">>> here", data.room);
+      console.log(">>>here2(data is>>)", data);
       messages.appendChild(item);
     }
   });
 
   // Handle chat history event
-  socket.on("chat history", function (messages) {
-    messages.forEach((message) => {
-      const item = document.createElement("li");
-      item.textContent = `${message.sender.username}: ${message.message.text}`;
-      messages.appendChild(item);
-    });
-  });
+  // socket.on("chat history", function (messages) {
+  //   messages.forEach((message) => {
+  //     const item = document.createElement("li");
+  //     item.textContent = `${message.sender.username}: ${message.message.text}`;
+  //     messages.appendChild(item);
+  //   });
+  // });
 
   const getRooms = async () => {
     const response = await fetch("http://localhost:3007/rooms");
@@ -82,13 +96,18 @@ document.addEventListener("DOMContentLoaded", function () {
   getRooms().then((allRooms) => {
     // console.log(">>> allRooms", allRooms);
     allRooms.forEach((room) => {
-      document
-        .querySelector(".room-wrapper")
-        .insertAdjacentHTML(
-          "beforeend",
-          `<button class="room" value="${room._id}">${room.name}</button>`
-        );
+      document.querySelector(".room-wrapper").insertAdjacentHTML(
+        "beforeend",
+        `<button class="room" value="${room._id}">${room.name}</button>`
+        // `<a class="room" href="/messages/${room._id}" value="${room._id}">${room.name}</a>`
+      );
     });
+
+    // await axios.post("http://localhost:3007/messages", {
+    //   sender: data._id,
+    //   room: currentChat._id,
+    //   text: msg,
+    // });
 
     const roomButtons = document.querySelectorAll(".room");
     roomButtons.forEach((roomButton) => {
@@ -99,6 +118,7 @@ document.addEventListener("DOMContentLoaded", function () {
         if (roomId) {
           input.disabled = false;
           form.querySelector("button").disabled = false;
+          // window.location.replace(`/messages/${roomId}`);
           leaveRoom();
           joinRoom(roomId);
         } else {

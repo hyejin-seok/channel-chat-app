@@ -12,22 +12,20 @@ const initSocketServer = (server) => {
     });
 
     // JOIN room
+    // roomId, user (2receive...client -> server)
     socket.on("join room", async (data) => {
       //Listen for the 'join room' event.
       socket.join(data.room);
       console.log(`${data.user} joined ${data.room}`);
       socket.username = data.user;
+      // let __createdtime__ = Date.now();
 
-      // Fetch chat history for the room
-      try {
-        const messages = await Message.find({ room: data.room })
-          .populate("sender", "username")
-          .exec();
-        // Send chat history to the user who joined
-        socket.emit("chat history", messages);
-      } catch (err) {
-        console.error("Error fetching chat history:", err);
+      // Get all message
+      const messages = await Message.find({ room: data.room });
+      if (!messages) {
+        return res.status(404).json({ message: "Item not found" });
       }
+      console.log(">>> message here", messages);
 
       // Send message to all clients in room
       io.to(data.room).emit("chat message", {
@@ -52,7 +50,23 @@ const initSocketServer = (server) => {
       console.log("Leave room event emitted");
     });
 
-    socket.on("chat message", (data) => {
+    // msg, user, roomId
+    socket.on("chat message", async (data) => {
+      console.log("Received message:>>>", data);
+
+      // Save the message to MongoDB
+      try {
+        const message = new Message({
+          sender: data.user,
+          room: data.room,
+          text: data.msg,
+        });
+        await message.save();
+        console.log("Message saved to the database");
+      } catch (err) {
+        console.error("Error saving message to database:", err);
+      }
+
       io.emit("chat message", {
         msg: data.msg,
         user: data.user,

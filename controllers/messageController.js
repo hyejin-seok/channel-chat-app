@@ -6,15 +6,32 @@ const chatRoom = (req, res) => {
   res.render("chatRoom", { pageTitle: "ChatRoom" });
 };
 
+const getMessagesByRoomId = async (req, res) => {
+  try {
+    console.log("whatis>>>", req.body);
+    const room = req.body;
+    const messages = await Message.find({ room: room });
+    if (!messages) {
+      return res.status(404).json({ message: "Item not found" });
+    }
+    console.log("messages >>>", messages);
+    res.json(messages);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
 // GET messages for a specific room
 const getRoomMessages = async (req, res) => {
   console.log(">>> getRoomMessages");
   try {
     const room = req.params.room; // Get the room from request parameters
-    const messages = await Message.find({ room: room }) // Find messages for the specified room
-      .populate("sender", "username") // Populate sender field with username
-      .exec();
-    res.json(messages);
+    console.log(">>> room", room);
+    // const messages = await Message.find({ room: room }) // Find messages for the specified room
+    //   .populate("sender", "username") // Populate sender field with username
+    //   .exec();
+    // res.json(messages);
+    // res.render("chatRoom", { pageTitle: "ChatRoom" });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
@@ -25,6 +42,7 @@ const createRoomMessage = async (req, res) => {
   console.log(">>> createRoomMessage");
   try {
     const { room, text } = req.body; // Extract room and text from request body
+
     const username = req.session.username;
 
     // Check if the user is logged in (username is available in session)
@@ -55,6 +73,7 @@ const createRoomMessage = async (req, res) => {
 
 module.exports = {
   chatRoom,
+  getMessagesByRoomId,
   getRoomMessages,
   createRoomMessage,
 };

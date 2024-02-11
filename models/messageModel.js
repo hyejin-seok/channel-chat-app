@@ -7,8 +7,7 @@ const { chatDB } = connectDBs();
 const messageSchema = new mongoose.Schema(
   {
     sender: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
+      type: String,
       required: true,
     },
     room: { type: String, required: true },
@@ -18,12 +17,6 @@ const messageSchema = new mongoose.Schema(
     timestamps: true,
   }
 );
-
-// const messageSchema = new mongoose.Schema({
-//   user: String,
-//   text: String,
-//   // timestamp: { type: Date, default: Date.now },
-// });
 
 const Message = chatDB.model("Message", messageSchema);
 module.exports = Message;
