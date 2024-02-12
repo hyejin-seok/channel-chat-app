@@ -1,73 +1,147 @@
+// const messageRoutes = require("./routes/messageRoutes");
+
 document.addEventListener("DOMContentLoaded", function () {
+  const domain = "http://localhost:3007";
   const socket = io();
   const form = document.querySelector("#form");
   const input = document.querySelector("#input");
-  const messages = document.querySelector("#messages");
-  const roomButtons = document.querySelectorAll(".room");
-
-  let currentRoom = "";
+  const messagesContainer = document.querySelector("#messages");
+  const chatHeader = document.querySelector("#chat-header");
+  let currentRoomId = "";
 
   input.disabled = true;
   form.querySelector("button").disabled = true;
 
-  roomButtons.forEach((roomButton) => {
-    roomButton.addEventListener("click", function () {
-      // Logic to handle room selection
-      const roomName = this.value; // Get the room name from button text
-      if (roomName) {
-        input.disabled = false;
-        form.querySelector("button").disabled = false;
-        leaveRoom();
-        joinRoom(roomName);
-      } else {
-        input.disabled = true;
-        form.querySelector("button").disabled = true;
-        leaveRoom();
-      }
-    });
-  });
+  const addMessagesToChatRoom = async (roomId, roomName) => {
+    const response = await fetch(`${domain}/messages/${roomId}`);
+    const messages = await response.json();
+    console.log(">>> all messages of this room:", messages);
 
-  function joinRoom(newRoom) {
-    currentRoom = newRoom;
-    socket.emit("join room", { room: newRoom, user: username });
-    messages.innerHTML = "";
+    chatHeader.innerHTML = `<h2>&#10077;&nbsp;&nbsp;${roomName}&nbsp;&nbsp;&#10078;</h2>`;
+    messages.map((message) => {
+      const { sender, text } = message;
+      messagesContainer.insertAdjacentHTML(
+        "beforeend",
+        `
+        <li>
+          <span>🪴 ${sender}</span><br>
+          &nbsp;${text} 
+        </li>
+      `
+      );
+    });
+  };
+
+  function joinRoom(roomId, roomName) {
+    currentRoomId = roomId;
+    addMessagesToChatRoom(roomId, roomName);
+    socket.emit("join room", {
+      room: roomId,
+      user: username,
+    });
   }
 
   function leaveRoom() {
-    if (currentRoom) {
-      socket.emit("leave room", currentRoom);
-      currentRoom = "";
-      messages.innerHTML = "";
+    if (currentRoomId) {
+      console.log(">>> leave room??");
+      socket.emit("leave room", currentRoomId);
+      currentRoomId = "";
+
+      // Maybe need maybe not??
+      messagesContainer.innerHTML = "";
     }
   }
 
-  form.addEventListener("submit", function (e) {
+  form.addEventListener("submit", async (e) => {
+    console.log(">>> send message");
     e.preventDefault();
     if (input.value && username) {
-      socket.emit("chat message", {
-        msg: input.value,
-        user: username,
-        room: currentRoom,
-      });
-      input.value = "";
+      // save message
+      try {
+        const data = {
+          username: username,
+          room: currentRoomId,
+          text: input.value,
+        };
+        const response = await fetch(`${domain}/messages`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        });
+
+        const result = await response.json();
+        console.log("Success:", result);
+
+        // emit socket
+        socket.emit("chat message", {
+          msg: input.value,
+          user: username,
+          room: currentRoomId,
+        });
+        input.value = "";
+      } catch (error) {
+        console.error("Error:", error);
+      }
     }
   });
 
-  // data.msg data.user data.room
   socket.on("chat message", function (data) {
-    if (data.room === currentRoom) {
-      const item = document.createElement("li");
-      item.textContent = `${username}: ${data.msg}`;
-      messages.appendChild(item);
+    if (data.room === currentRoomId) {
+      // const item = document.createElement("li");
+      // item.textContent = `🪴 ${data.user}: ${data.msg}`;
+      // console.log(">>> here", data.roome);
+      // console.log(">>>here2(data is>>)", data);
+      // messagesContainer.appendChild(item);
+
+      const { user, msg } = data;
+      messagesContainer.insertAdjacentHTML(
+        "beforeend",
+        `
+        <li>
+          <span>🪴 ${user}</span><br>
+          &nbsp;${msg}
+        </li>
+      `
+      );
     }
   });
-});
 
-// Handle chat history event
-socket.on("chat history", function (messages) {
-  messages.forEach((message) => {
-    const item = document.createElement("li");
-    item.textContent = `${message.sender.username}: ${message.message.text}`;
-    messages.appendChild(item);
+  const getRooms = async () => {
+    const response = await fetch(`${domain}/rooms`);
+    const rooms = await response.json();
+    return rooms;
+  };
+
+  getRooms().then((allRooms) => {
+    // console.log(">>> allRooms", allRooms);
+    allRooms.forEach((room) => {
+      document.querySelector(".room-wrapper").insertAdjacentHTML(
+        "beforeend",
+        `<button class="room" value="${room._id}">${room.name}</button>`
+        // `<a class="room" href="/messages/${room._id}" value="${room._id}">${room.name}</a>`
+      );
+    });
+
+    const roomButtons = document.querySelectorAll(".room");
+    roomButtons.forEach((roomButton) => {
+      roomButton.addEventListener("click", function () {
+        // Logic to handle room selection
+        const roomId = this.value; // Get the room name from button text
+        const buttonText = this.textContent;
+        console.log(">>> room value", roomId);
+        if (roomId) {
+          input.disabled = false;
+          form.querySelector("button").disabled = false;
+          leaveRoom();
+          joinRoom(roomId, buttonText);
+        } else {
+          input.disabled = true;
+          form.querySelector("button").disabled = true;
+          leaveRoom();
+        }
+      });
+    });
   });
 });

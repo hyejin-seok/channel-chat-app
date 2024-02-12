@@ -1,45 +1,35 @@
-/* :root {
-    --bg-color: #2D4356;
-    --font-color: #ede0d4;
-    --sidebar-color: #435B66;
-    --box-color: #EAB2A0;
-    --btn-color: #A76F6F;
-    --point-color: #EAB2A0;
-  }
-   */
+
+  
    
-/* :root {
+:root {
     --bg-color: #2C3639;
     --font-color: #DCD7C9;
+    --font-color: #f6f5f1;
     --sidebar-color: #3F4E4F;
     --out-color: #161b1d;
+    --out-color: #bbbbbf;
+    /* --out-color: #c2c8c6; */
     --btn-color: #A27B5C;
-    --point-color: #7f4f24;
+    --point-color: #DCD7C9;
+  }
+/* :root {
+    --bg-color: #2D4356;
+    --font-color: #DCD7C9;
+    --sidebar-color: #435B66;
+    --out-color: #161b1d;
+    --btn-color: #A76F6F;
+    --point-color: #EAB2A0;
   } */
 
-/* :root {
-    --bg-color: #332521;
-    --font-color: #DCD7C9;
-    --sidebar-color: #4B3830;
-    --out-color: #373F38;
-    --btn-color: #5F3920;
-    --point-color: #7f4f24;
-  } */
-/* :root {
-    --bg-color: #3B2214;
-    --font-color: #DCD7C9;
-    --sidebar-color: #563521;
-    --out-color: #1e1619;
-    --btn-color: #684127;
-    --btn-color: #7a4343;
-    --point-color: #7f4f24;
-  } */
-  
+
+
+
+/* 
 :root {
     --bg-color: #341d1c;
     --font-color: #DCD7C9;
     --sidebar-color: #522d2d;
     --out-color: #1e1619;
     --btn-color: #7a4343;
-    --point-color: #7f4f24;
-  }
+    --point-color: #e0baba;
+  } */

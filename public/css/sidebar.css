@@ -15,18 +15,9 @@
     align-items: center;
     /* border: 1px solid white; */
     background-color: var(--sidebar-color);
-    border-radius: 5px;
+    border-radius: 8px;
 }
 
-/* .sidebar-container::-webkit-scrollbar {
-    width: 0.2rem;
-}
-
-.sidebar-container::-webkit-scrollbar-thumb {
-    background-color: #ffffff39;
-    width: 0.1rem;
-    border-radius: 1rem;
-} */
 
 .room-wrapper {
     width: 80%;
@@ -45,16 +36,42 @@
 
 .logout-wrapper {
     width: 80%;
+    height: auto;
     display: flex;
+    flex-direction: column;
     justify-content: center;
-    /* align-items: center; */
-    border: 1px solid pink;
+    align-items: center;
+    /* border: 1px solid pink; */
+    padding: 10px 0 ;
+    font-size: 1.1rem;
 }
 
-.logout-wrapper button {
-    width: 50%;
-    height: 50px;
-    margin: 20px 0;
-}
+#logoutButton {
+    display: inline-block;
+    width: 150px;
+    height: 45px;
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--bg-color);
+    color: var(--font-color);
+    transition: background-color .3s ease-in-out;
+    font-size: 1rem;
+    text-decoration: none;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+  }
+  
+  #logoutButton:hover {
+    background-color: var(--font-color);
+    color: var(--sidebar-color);
+  }
 
+  /* #logoutButton svg {
+    width: 30px;
+    margin-right: 10px;
+  } */
+  
     

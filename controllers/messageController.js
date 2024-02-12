@@ -1,39 +1,33 @@
 const Message = require("../models/messageModel");
 const User = require("../models/userModel");
 
-// GET messages for a specific room
-const getRoomMessages = async (req, res) => {
+// chatRoom Page
+const chatRoom = (req, res) => {
+  res.render("chatRoom", { pageTitle: "ChatRoom" });
+};
+
+const getMessagesByRoomId = async (req, res) => {
   try {
-    const room = req.params.room; // Get the room from request parameters
-    const messages = await Message.find({ room: room }) // Find messages for the specified room
-      .populate("sender", "username") // Populate sender field with username
-      .exec();
+    const roomId = req.params.id;
+    const messages = await Message.find({ room: roomId });
+    if (!messages) {
+      return res.status(404).json({ message: "Item not found" });
+    }
+    console.log("messages >>>", messages);
     res.json(messages);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
 };
 
-// ADD message to a specific room
-const createRoomMessage = async (req, res) => {
+const saveMessage = async (req, res) => {
   try {
-    const { room, text } = req.body; // Extract room and text from request body
-    const username = req.session.username;
+    const { room, text, username } = req.body; // Extract room and text from request body
 
-    // Check if the user is logged in (username is available in session)
-    if (!username) {
-      return res.status(401).json({ message: "User not authenticated" });
-    }
-
-    // Find the user document based on the username
-    const user = await User.findOne({ username });
-    if (!user) {
-      return res.status(404).json({ message: "User not found" });
-    }
     // Create the new message
     const newMessage = new Message({
-      message: { text: text },
-      sender: user._id,
+      text: text,
+      sender: username,
       room: room,
     });
 
@@ -46,6 +40,7 @@ const createRoomMessage = async (req, res) => {
 };
 
 module.exports = {
-  getRoomMessages,
-  createRoomMessage,
+  chatRoom,
+  getMessagesByRoomId,
+  saveMessage,
 };

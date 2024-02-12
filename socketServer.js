@@ -14,27 +14,19 @@ const initSocketServer = (server) => {
     // JOIN room
     socket.on("join room", async (data) => {
       //Listen for the 'join room' event.
-      socket.join(data.room);
-      console.log(`${data.user} joined ${data.room}`);
-      socket.username = data.user;
+      console.log("what is data>>", data);
 
-      // Fetch chat history for the room
-      try {
-        const messages = await Message.find({ room: data.room })
-          .populate("sender", "username")
-          .exec();
-        // Send chat history to the user who joined
-        socket.emit("chat history", messages);
-      } catch (err) {
-        console.error("Error fetching chat history:", err);
-      }
+      socket.join(data.room);
+      console.log(`${data.user} joined ${data.roomName}`);
+      socket.username = data.user;
+      // let __createdtime__ = Date.now();
 
       // Send message to all clients in room
-      io.to(data.room).emit("chat message", {
-        msg: `${data.user} has joined the ${data.room}`,
-        user: "System",
-        room: data.room,
-      });
+      // io.to(data.room).emit("chat message", {
+      //   msg: `${data.user} has joined the ${data.roomName}`,
+      //   user: "System",
+      //   roomId: data.room,
+      // });
     });
 
     // LEAVE room
@@ -43,16 +35,18 @@ const initSocketServer = (server) => {
       console.log(`${socket.username} has left ${room}`);
 
       // Send message to all clients in room
-      io.to(room).emit("chat message", {
-        msg: `${socket.username} has left ${room}`,
-        user: "System",
-        room: room,
-      });
+      // io.to(room).emit("chat message", {
+      //   msg: `${socket.username} has left room`,
+      //   user: "System",
+      //   room: room,
+      // });
 
       console.log("Leave room event emitted");
     });
 
-    socket.on("chat message", (data) => {
+    socket.on("chat message", async (data) => {
+      console.log("Received message:>>>", data);
+
       io.emit("chat message", {
         msg: data.msg,
         user: data.user,

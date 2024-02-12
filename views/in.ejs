@@ -12,3 +12,11 @@
       </form>
     </div>
     <% } %> -->
+
+    <% memos.forEach((memo) => { %>
+      <li>
+        <h2><%= memo.category %></h2>
+        <h3>Title: <%= memo.title %></h3>
+        <p>Content: <%= memo.content %></p>
+      </li>
+      <% }); %>
