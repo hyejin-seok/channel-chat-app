@@ -23,7 +23,6 @@ app.use(
     secret: "kalsjdfajdsjf", // Change this to a random string (used to sign the session ID cookie)
     resave: false, // Avoids saving session if not modified
     saveUninitialized: false, // Avoids creating sessions for unauthenticated users
-    // Other options...
   })
 );
 
@@ -55,7 +54,7 @@ const authenticateUser = (req, res, next) => {
 
 app.get("/", authenticateUser, (req, res) => {
   console.log("Username in session:", req.session.username);
-  res.render("index", {
+  res.render("chatRoom", {
     pageTitle: "Home-Chatroom",
     // username: req.session.username,
   });

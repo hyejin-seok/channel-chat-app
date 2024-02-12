@@ -6,47 +6,52 @@ document.addEventListener("DOMContentLoaded", function () {
   const form = document.querySelector("#form");
   const input = document.querySelector("#input");
   const messagesContainer = document.querySelector("#messages");
-  let currentRoom = "";
+  const chatHeader = document.querySelector("#chat-header");
+  let currentRoomId = "";
 
   input.disabled = true;
   form.querySelector("button").disabled = true;
 
-  const addMessagesToChatRoom = async (roomId) => {
+  const addMessagesToChatRoom = async (roomId, roomName) => {
     const response = await fetch(`${domain}/messages/${roomId}`);
     const messages = await response.json();
     console.log(">>> all messages of this room:", messages);
+
+    chatHeader.innerHTML = `<h2>&#10077;&nbsp;&nbsp;${roomName}&nbsp;&nbsp;&#10078;</h2>`;
     messages.map((message) => {
       const { sender, text } = message;
       messagesContainer.insertAdjacentHTML(
         "beforeend",
         `
         <li>
-          <strong>${sender}</strong>: ${text}
+          <span>🪴 ${sender}</span><br>
+          &nbsp;${text} 
         </li>
       `
       );
     });
   };
 
-  // roomId, user (1send...client -> server)
-  function joinRoom(roomId) {
-    currentRoom = roomId;
-    addMessagesToChatRoom(roomId);
-    socket.emit("join room", { room: roomId, user: username });
+  function joinRoom(roomId, roomName) {
+    currentRoomId = roomId;
+    addMessagesToChatRoom(roomId, roomName);
+    socket.emit("join room", {
+      room: roomId,
+      user: username,
+    });
   }
 
   function leaveRoom() {
-    if (currentRoom) {
+    if (currentRoomId) {
       console.log(">>> leave room??");
-      socket.emit("leave room", currentRoom);
-      currentRoom = "";
+      socket.emit("leave room", currentRoomId);
+      currentRoomId = "";
 
       // Maybe need maybe not??
       messagesContainer.innerHTML = "";
     }
   }
 
-  // msg, user, roomId (서버로 보내는 것들)
   form.addEventListener("submit", async (e) => {
     console.log(">>> send message");
     e.preventDefault();
@@ -55,11 +60,11 @@ document.addEventListener("DOMContentLoaded", function () {
       try {
         const data = {
           username: username,
-          room: currentRoom,
+          room: currentRoomId,
           text: input.value,
         };
         const response = await fetch(`${domain}/messages`, {
-          method: "POST", // or 'PUT'
+          method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
@@ -73,7 +78,7 @@ document.addEventListener("DOMContentLoaded", function () {
         socket.emit("chat message", {
           msg: input.value,
           user: username,
-          room: currentRoom,
+          room: currentRoomId,
         });
         input.value = "";
       } catch (error) {
@@ -82,25 +87,26 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 
-  // msg, user, roomId
   socket.on("chat message", function (data) {
-    if (data.room === currentRoom) {
-      const item = document.createElement("li");
-      item.textContent = `${data.user}: ${data.msg}`;
-      console.log(">>> here", data.room);
-      console.log(">>>here2(data is>>)", data);
-      messagesContainer.appendChild(item);
+    if (data.room === currentRoomId) {
+      // const item = document.createElement("li");
+      // item.textContent = `🪴 ${data.user}: ${data.msg}`;
+      // console.log(">>> here", data.roome);
+      // console.log(">>>here2(data is>>)", data);
+      // messagesContainer.appendChild(item);
+
+      const { user, msg } = data;
+      messagesContainer.insertAdjacentHTML(
+        "beforeend",
+        `
+        <li>
+          <span>🪴 ${user}</span><br>
+          &nbsp;${msg}
+        </li>
+      `
+      );
     }
   });
-
-  // Handle chat history event
-  // socket.on("chat history", function (messages) {
-  //   messages.forEach((message) => {
-  //     const item = document.createElement("li");
-  //     item.textContent = `${message.sender.username}: ${message.message.text}`;
-  //     messages.appendChild(item);
-  //   });
-  // });
 
   const getRooms = async () => {
     const response = await fetch(`${domain}/rooms`);
@@ -118,23 +124,18 @@ document.addEventListener("DOMContentLoaded", function () {
       );
     });
 
-    // await axios.post("http://localhost:3007/messages", {
-    //   sender: data._id,
-    //   room: currentChat._id,
-    //   text: msg,
-    // });
-
     const roomButtons = document.querySelectorAll(".room");
     roomButtons.forEach((roomButton) => {
       roomButton.addEventListener("click", function () {
         // Logic to handle room selection
         const roomId = this.value; // Get the room name from button text
+        const buttonText = this.textContent;
         console.log(">>> room value", roomId);
         if (roomId) {
           input.disabled = false;
           form.querySelector("button").disabled = false;
           leaveRoom();
-          joinRoom(roomId);
+          joinRoom(roomId, buttonText);
         } else {
           input.disabled = true;
           form.querySelector("button").disabled = true;

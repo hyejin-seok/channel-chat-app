@@ -39,43 +39,8 @@ const saveMessage = async (req, res) => {
   }
 };
 
-// ADD message to a specific room
-const createRoomMessage = async (req, res) => {
-  console.log(">>> createRoomMessage");
-  try {
-    const { room, text } = req.body; // Extract room and text from request body
-
-    const username = req.session.username;
-
-    // Check if the user is logged in (username is available in session)
-    if (!username) {
-      return res.status(401).json({ message: "User not authenticated" });
-    }
-
-    // Find the user document based on the username
-    const user = await User.findOne({ username });
-    if (!user) {
-      return res.status(404).json({ message: "User not found" });
-    }
-
-    // Create the new message
-    const newMessage = new Message({
-      message: { text: text },
-      sender: user._id,
-      room: room,
-    });
-
-    // Save the new message
-    const addedMessage = await newMessage.save();
-    res.json(addedMessage);
-  } catch (err) {
-    res.status(500).json({ message: err.message });
-  }
-};
-
 module.exports = {
   chatRoom,
   getMessagesByRoomId,
   saveMessage,
-  createRoomMessage,
 };
