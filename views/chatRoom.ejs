@@ -6,21 +6,30 @@
     </div>
 
 
-    <div class="chat-container"> 
+    <!-- <div class="chat-container">  -->
+    <div id="room-selected-content">
       <div class="chatroom-wrapper">
-        <div id="chat-header">
-        </div>
-        <ul id="messages">
-        </ul>
+          <div id="chat-header">
+          </div>
+          <ul id="messages">
+          </ul>
       </div>
 
       <div class="form-wrapper">
-        <form id="form" action="">
-          <input type="text" id="input" autocomplete="off" placeholder="Write something..." />
-          <button>Send Message</button>
-        </form>
+          <form id="form" action="">
+            <input type="text" id="input" autocomplete="off" placeholder="Write something..." />
+            <button>Send Message</button>
+          </form>
       </div>
     </div>
+    <div id="room-not-selected-content">
+      <img src="/images/chat-pic1.jpg" class="image" alt="chat-picture">
+      <h2>Welcome to "Chat Connect", <%= username %>! 👋</h2>
+      <p>Please select a chat room from the sidebar to start chatting.</p>
+
+    </div>
+
+    <!-- </div> -->
     
 
   </div>

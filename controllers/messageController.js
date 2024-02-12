@@ -3,7 +3,10 @@ const User = require("../models/userModel");
 
 // chatRoom Page
 const chatRoom = (req, res) => {
-  res.render("chatRoom", { pageTitle: "ChatRoom" });
+  res.render("chatRoom", {
+    pageTitle: "ChatRoom",
+    currentRoomId: req.session.currentRoomId,
+  });
 };
 
 const getMessagesByRoomId = async (req, res) => {

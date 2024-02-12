@@ -9,86 +9,8 @@ document.addEventListener("DOMContentLoaded", function () {
   const chatHeader = document.querySelector("#chat-header");
   let currentRoomId = "";
 
-  const getRooms = async () => {
-    const response = await fetch(`${domain}/rooms`);
-    const rooms = await response.json();
-    return rooms;
-  };
-
-  getRooms().then((allRooms) => {
-    // console.log(">>> allRooms", allRooms);
-    allRooms.forEach((room) => {
-      document.querySelector(".room-wrapper").insertAdjacentHTML(
-        "beforeend",
-        `<button class="room" value="${room._id}">${room.name}</button>`
-        // `<a class="room" href="/messages/${room._id}" value="${room._id}">${room.name}</a>`
-      );
-    });
-
-    updateUI(null);
-
-    const roomButtons = document.querySelectorAll(".room");
-    roomButtons.forEach((roomButton) => {
-      roomButton.addEventListener("click", function () {
-        // Logic to handle room selection
-        const roomId = this.value; // Get the room name from button text
-        const buttonText = this.textContent;
-        console.log(">>> room value", roomId);
-        if (roomId) {
-          input.disabled = false;
-          form.querySelector("button").disabled = false;
-          leaveRoom();
-          joinRoom(roomId, buttonText);
-          updateUI(roomId);
-        } else {
-          input.disabled = true;
-          form.querySelector("button").disabled = true;
-          leaveRoom();
-          updateUI(null);
-        }
-      });
-    });
-  });
-
-  // input.disabled = true;
-  // form.querySelector("button").disabled = true;
-
-  function joinRoom(roomId, roomName) {
-    currentRoomId = roomId;
-    addMessagesToChatRoom(roomId, roomName);
-    socket.emit("join room", {
-      room: roomId,
-      user: username,
-    });
-  }
-
-  function leaveRoom() {
-    if (currentRoomId) {
-      console.log(">>> leave room??");
-      socket.emit("leave room", currentRoomId);
-      currentRoomId = "";
-
-      // Maybe need maybe not??
-      messagesContainer.innerHTML = "";
-    }
-  }
-
-  function updateUI(roomId) {
-    const roomNotSelectedContent = document.getElementById(
-      "room-not-selected-content"
-    );
-    const roomSelectedContent = document.getElementById(
-      "room-selected-content"
-    );
-
-    if (!roomId) {
-      roomNotSelectedContent.style.display = "flex";
-      roomSelectedContent.style.display = "none";
-    } else {
-      roomNotSelectedContent.style.display = "none";
-      roomSelectedContent.style.display = "grid";
-    }
-  }
+  input.disabled = true;
+  form.querySelector("button").disabled = true;
 
   const addMessagesToChatRoom = async (roomId, roomName) => {
     const response = await fetch(`${domain}/messages/${roomId}`);
@@ -184,5 +106,42 @@ document.addEventListener("DOMContentLoaded", function () {
       `
       );
     }
+  });
+
+  const getRooms = async () => {
+    const response = await fetch(`${domain}/rooms`);
+    const rooms = await response.json();
+    return rooms;
+  };
+
+  getRooms().then((allRooms) => {
+    // console.log(">>> allRooms", allRooms);
+    allRooms.forEach((room) => {
+      document.querySelector(".room-wrapper").insertAdjacentHTML(
+        "beforeend",
+        `<button class="room" value="${room._id}">${room.name}</button>`
+        // `<a class="room" href="/messages/${room._id}" value="${room._id}">${room.name}</a>`
+      );
+    });
+
+    const roomButtons = document.querySelectorAll(".room");
+    roomButtons.forEach((roomButton) => {
+      roomButton.addEventListener("click", function () {
+        // Logic to handle room selection
+        const roomId = this.value; // Get the room name from button text
+        const buttonText = this.textContent;
+        console.log(">>> room value", roomId);
+        if (roomId) {
+          input.disabled = false;
+          form.querySelector("button").disabled = false;
+          leaveRoom();
+          joinRoom(roomId, buttonText);
+        } else {
+          input.disabled = true;
+          form.querySelector("button").disabled = true;
+          leaveRoom();
+        }
+      });
+    });
   });
 });

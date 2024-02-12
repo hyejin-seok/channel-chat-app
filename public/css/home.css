@@ -1,4 +1,4 @@
-/* @import 'variables.css'; */
+@import 'variables.css';
 
 .home-section {
     width: 100vw;
@@ -20,5 +20,35 @@
     grid-template-columns: 25% 75%;
     border-radius: 8px;
     background-color: var(--bg-color);
-    /* border: 2px solid yellow; */
+    box-shadow: rgba(68, 78, 81, 0.4) 5px 5px, rgba(68, 78, 81, 0.3) 10px 10px, rgba(68, 78, 81, 0.2) 15px 15px, rgba(68, 78, 81, 0.1) 20px 20px, rgba(68, 78, 81, 0.05) 25px 25px;
+    /* box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px; */
+}
+
+#room-not-selected-content {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+.image {
+    width: 350px; 
+    height: auto; 
+    border-radius: 8px; 
+    /* box-shadow: 5px 5px 5px rgba(230, 224, 224, 0.5);  */
+    opacity: 0.8;
+    margin-bottom: 15px;
+    /* box-shadow: blue 0px 0px 0px 2px inset, rgba(255, 255, 255, 0.5) 10px -10px 0px -3px, rgba(31, 193, 27, 0.5) 10px -10px, rgba(255, 255, 255, 0.5) 20px -20px 0px -3px, rgba(255, 217, 19, 0.5) 20px -20px, rgba(255, 255, 255, 0.5) 30px -30px 0px -3px, rgba(255, 156, 85, 0.5) 30px -30px, rgba(255, 255, 255, 0.5) 40px -40px 0px -3px, rgba(255, 85, 85, 0.5) 40px -40px; */
+     box-shadow: blue 0px 0px 0px 2px inset, rgba(255, 255, 255, 0.7) 10px -10px 0px -3px, rgba(31, 193, 27, 0.7) 10px -10px, rgba(255, 255, 255, 0.7) 20px -20px 0px -3px, rgba(255, 217, 19, 0.7) 20px -20px, rgba(255, 255, 255, 0.7) 30px -30px 0px -3px, rgba(255, 156, 85, 0.7) 30px -30px, rgba(255, 255, 255, 0.7) 40px -40px 0px -3px, rgba(255, 85, 85, 0.7) 40px -40px;
+}
+
+#room-not-selected-content h2 {
+    /* font-size: 1.7rem; */
+    color: var(--point-color);
+}
+
+
+#room-not-selected-content p {
+    font-size: 1.1rem;
+    color: var(--btn-color);
 }

@@ -53,9 +53,10 @@ const authenticateUser = (req, res, next) => {
 };
 
 app.get("/", authenticateUser, (req, res) => {
-  console.log("Username in session:", req.session.username);
+  // console.log("Username in session:", req.session.username);
   res.render("chatRoom", {
     pageTitle: "Home-Chatroom",
+    currentRoomId: req.session.currentRoomId,
     // username: req.session.username,
   });
   // res.render("auth/login", { pageTitle: "Login" });
