@@ -4,6 +4,8 @@ const messageController = require("../controllers/messageController");
 
 router.get("/", messageController.chatRoom);
 router.get("/:id", messageController.getMessagesByRoomId);
+router.post("/", messageController.saveMessage);
+
 // router.get("/:id", messageController.getRoomMessages);
 // router.post("/", messageController.createRoomMessage);
 

@@ -20,17 +20,20 @@ const getMessagesByRoomId = async (req, res) => {
   }
 };
 
-// GET messages for a specific room
-const getRoomMessages = async (req, res) => {
-  console.log(">>> getRoomMessages");
+const saveMessage = async (req, res) => {
   try {
-    const room = req.params.room; // Get the room from request parameters
-    console.log(">>> room", room);
-    // const messages = await Message.find({ room: room }) // Find messages for the specified room
-    //   .populate("sender", "username") // Populate sender field with username
-    //   .exec();
-    // res.json(messages);
-    // res.render("chatRoom", { pageTitle: "ChatRoom" });
+    const { room, text, username } = req.body; // Extract room and text from request body
+
+    // Create the new message
+    const newMessage = new Message({
+      text: text,
+      sender: username,
+      room: room,
+    });
+
+    // Save the new message
+    const addedMessage = await newMessage.save();
+    res.json(addedMessage);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
@@ -73,6 +76,6 @@ const createRoomMessage = async (req, res) => {
 module.exports = {
   chatRoom,
   getMessagesByRoomId,
-  getRoomMessages,
+  saveMessage,
   createRoomMessage,
 };

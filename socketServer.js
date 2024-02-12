@@ -47,19 +47,6 @@ const initSocketServer = (server) => {
     socket.on("chat message", async (data) => {
       console.log("Received message:>>>", data);
 
-      // Save the message to MongoDB
-      try {
-        const message = new Message({
-          sender: data.user,
-          room: data.room,
-          text: data.msg,
-        });
-        await message.save();
-        console.log("Message saved to the database");
-      } catch (err) {
-        console.error("Error saving message to database:", err);
-      }
-
       io.emit("chat message", {
         msg: data.msg,
         user: data.user,

@@ -1,6 +1,7 @@
 // const messageRoutes = require("./routes/messageRoutes");
 
 document.addEventListener("DOMContentLoaded", function () {
+  const domain = "http://localhost:3007";
   const socket = io();
   const form = document.querySelector("#form");
   const input = document.querySelector("#input");
@@ -11,7 +12,7 @@ document.addEventListener("DOMContentLoaded", function () {
   form.querySelector("button").disabled = true;
 
   const addMessagesToChatRoom = async (roomId) => {
-    const response = await fetch(`http://localhost:3007/messages/${roomId}`);
+    const response = await fetch(`${domain}/messages/${roomId}`);
     const messages = await response.json();
     console.log(">>> all messages of this room:", messages);
     messages.map((message) => {
@@ -46,16 +47,38 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   // msg, user, roomId (서버로 보내는 것들)
-  form.addEventListener("submit", function (e) {
+  form.addEventListener("submit", async (e) => {
     console.log(">>> send message");
     e.preventDefault();
     if (input.value && username) {
-      socket.emit("chat message", {
-        msg: input.value,
-        user: username,
-        room: currentRoom,
-      });
-      input.value = "";
+      // save message
+      try {
+        const data = {
+          username: username,
+          room: currentRoom,
+          text: input.value,
+        };
+        const response = await fetch(`${domain}/messages`, {
+          method: "POST", // or 'PUT'
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        });
+
+        const result = await response.json();
+        console.log("Success:", result);
+
+        // emit socket
+        socket.emit("chat message", {
+          msg: input.value,
+          user: username,
+          room: currentRoom,
+        });
+        input.value = "";
+      } catch (error) {
+        console.error("Error:", error);
+      }
     }
   });
 
@@ -80,7 +103,7 @@ document.addEventListener("DOMContentLoaded", function () {
   // });
 
   const getRooms = async () => {
-    const response = await fetch("http://localhost:3007/rooms");
+    const response = await fetch(`${domain}/rooms`);
     const rooms = await response.json();
     return rooms;
   };
