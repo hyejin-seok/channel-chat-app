@@ -3,15 +3,19 @@ require("dotenv").config();
 const express = require("express");
 const http = require("http");
 const session = require("express-session");
+const cookieParser = require("cookie-parser");
 const initSocketServer = require("./socketServer");
 const path = require("path");
 
 const app = express();
 const server = http.createServer(app);
+const sercureKey = "adfqef1233afdgadf";
 
 app.set("view engine", "ejs");
 app.use(express.json());
+app.use(cookieParser(sercureKey));
 app.use(express.static("public"));
+
 app.use(express.urlencoded({ extended: false })); // middleware to parse incoming requests with URL-encoded payloads.
 // Set up session middleware
 app.use(
@@ -37,10 +41,16 @@ app.use((req, res, next) => {
 
 // Middleware to check if user is authenticated
 const authenticateUser = (req, res, next) => {
-  if (!req.session.username) {
-    return res.redirect("/users/login"); // Redirect to login page if user is not authenticated
+  // if (!req.session.username) {
+  //   return res.redirect("/users/login"); Redirect to login page if user is not authenticated
+  // }
+  if (req.cookies.userCookie) {
+    return next(); // User is authenticated (Proceed to the next middleware or route handler)
   }
-  next(); // Proceed to the next middleware or route handler
+  if (req.path === "/users/login") {
+    return next();
+  }
+  res.redirect("/users/login");
 };
 
 app.get("/", authenticateUser, (req, res) => {
@@ -53,8 +63,8 @@ app.get("/", authenticateUser, (req, res) => {
 });
 
 app.use("/users", userRoutes);
-app.use("/messages", messageRoutes);
-app.use("/rooms", roomRoutes);
+app.use("/messages", authenticateUser, messageRoutes);
+app.use("/rooms", authenticateUser, roomRoutes);
 
 // Catch-all route for invalid requests
 app.use((req, res) => {

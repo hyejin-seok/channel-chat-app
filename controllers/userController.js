@@ -1,7 +1,5 @@
 const User = require("../models/userModel");
 const bcrypt = require("bcrypt");
-const session = require("express-session");
-// const cookieParser = require("cookie-parser");
 
 // Signup Page
 const signup = (req, res) => {
@@ -70,7 +68,11 @@ const loginLogic = async (req, res) => {
     if (isPsswordMatch) {
       // Store the username in the session
       req.session.username = req.body.username;
-      // res.render("index", { pageTitle: "Home - Chatroom" });
+      res.cookie("userCookie", req.body.username, {
+        httpOnly: true,
+        maxAge: 60000 * 60 * 6, // 6hr
+      });
+
       res.redirect("/messages");
     } else {
       res.redirect("/users/login?error=1");
@@ -82,9 +84,20 @@ const loginLogic = async (req, res) => {
   }
 };
 
+const logout = (req, res) => {
+  req.session.destroy((err) => {
+    if (err) {
+      console.error("Error destroying session:", err);
+    }
+    res.clearCookie("userCookie");
+    res.redirect("/users/login?logout=success");
+  });
+};
+
 module.exports = {
   signup,
   signupLogic,
   login,
   loginLogic,
+  logout,
 };

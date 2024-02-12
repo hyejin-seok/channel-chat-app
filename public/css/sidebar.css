@@ -45,16 +45,36 @@
 
 .logout-wrapper {
     width: 80%;
+    height: auto;
     display: flex;
+    flex-direction: column;
     justify-content: center;
-    /* align-items: center; */
+    align-items: center;
     border: 1px solid pink;
+    padding: 10px 0 ;
 }
 
-.logout-wrapper button {
+#logoutButton {
+    display: inline-block;
     width: 50%;
     height: 50px;
-    margin: 20px 0;
-}
-
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--btn-color);
+    color: var(--font-color);
+    transition: background-color .3s ease-in-out;
+    font-size: 1rem;
+    text-decoration: none;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  #logoutButton:hover {
+    background-color: var(--font-color);
+    color: var(--btn-color);
+  }
+  
     
