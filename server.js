@@ -34,29 +34,46 @@ app.set("views", path.join(__dirname, "views"));
 
 // Middleware to pass username session to routes
 app.use((req, res, next) => {
-  res.locals.username = req.session.username;
+  if (req.session.username) {
+    // Capitalize the first letter of the username
+    const username =
+      req.session.username.charAt(0).toUpperCase() +
+      req.session.username.slice(1);
+    res.locals.username = username;
+  }
   next();
 });
 
 // Middleware to check if user is authenticated
+// const authenticateUser = (req, res, next) => {
+//   if (!req.session.username) {
+//     return res.redirect("/users/login");
+//   }
+//   if (req.cookies.userCookie) {
+//     return next();
+//   }
+//   if (req.path === "/users/login") {
+//     return next();
+//   }
+//   res.redirect("/users/login");
+// };
+
+// Middleware to check if user is authenticated
 const authenticateUser = (req, res, next) => {
-  // if (!req.session.username) {
-  //   return res.redirect("/users/login"); Redirect to login page if user is not authenticated
-  // }
+  if (!req.session.username) {
+    return res.redirect("/users/login"); // Redirect to login page if user is not authenticated
+  }
   if (req.cookies.userCookie) {
     return next(); // User is authenticated (Proceed to the next middleware or route handler)
   }
-  if (req.path === "/users/login") {
-    return next();
-  }
+  // If user is authenticated but doesn't have the userCookie, redirect to login page
   res.redirect("/users/login");
 };
 
 app.get("/", authenticateUser, (req, res) => {
   // console.log("Username in session:", req.session.username);
   res.render("chatRoom", {
-    pageTitle: "Home-Chatroom",
-    currentRoomId: req.session.currentRoomId,
+    pageTitle: "Channel Cluster",
     // username: req.session.username,
   });
   // res.render("auth/login", { pageTitle: "Login" });

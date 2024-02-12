@@ -4,8 +4,8 @@ const User = require("../models/userModel");
 // chatRoom Page
 const chatRoom = (req, res) => {
   res.render("chatRoom", {
-    pageTitle: "ChatRoom",
-    currentRoomId: req.session.currentRoomId,
+    pageTitle: "Channel Cluster - Multiple Real-Time Chat Channels",
+    // currentRoomId: req.session.currentRoomId,
   });
 };
 

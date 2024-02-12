@@ -3,7 +3,7 @@ const bcrypt = require("bcrypt");
 
 // Signup Page
 const signup = (req, res) => {
-  res.render("auth/signup", { pageTitle: "Sign up" }); // "/auth/signup" 안됨
+  res.render("auth/signup", { pageTitle: "Sign up - Channel Cluster" }); // "/auth/signup" 안됨
 };
 
 // Signup Logic (ADD user)
@@ -48,7 +48,11 @@ const signupLogic = async (req, res) => {
 // Login Page
 const login = (req, res) => {
   const { error, logout } = req.query;
-  res.render("auth/login", { pageTitle: "Login", error, logout });
+  res.render("auth/login", {
+    pageTitle: "Login - Channel Cluster",
+    error,
+    logout,
+  });
 };
 
 // Login Logic

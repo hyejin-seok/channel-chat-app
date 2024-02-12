@@ -98,11 +98,13 @@ document.addEventListener("DOMContentLoaded", function () {
     chatHeader.innerHTML = `<h2>&#10077;&nbsp;&nbsp;${roomName}&nbsp;&nbsp;&#10078;</h2>`;
     messages.map((message) => {
       const { sender, text } = message;
+      const capitalizedSender =
+        sender.charAt(0).toUpperCase() + sender.slice(1);
       messagesContainer.insertAdjacentHTML(
         "beforeend",
         `
         <li>
-          <span>🪴 ${sender}</span><br>
+          <span>🪴 ${capitalizedSender}</span><br>
           &nbsp;${text} 
         </li>
       `
@@ -174,11 +176,12 @@ document.addEventListener("DOMContentLoaded", function () {
       // messagesContainer.appendChild(item);
 
       const { user, msg } = data;
+      const capitalizedUser = user.charAt(0).toUpperCase() + user.slice(1);
       messagesContainer.insertAdjacentHTML(
         "beforeend",
         `
         <li>
-          <span>🪴 ${user}</span><br>
+          <span>🪴 ${capitalizedUser}</span><br>
           &nbsp;${msg}
         </li>
       `
