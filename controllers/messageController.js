@@ -8,9 +8,8 @@ const chatRoom = (req, res) => {
 
 const getMessagesByRoomId = async (req, res) => {
   try {
-    console.log("whatis>>>", req.body);
-    const room = req.body;
-    const messages = await Message.find({ room: room });
+    const roomId = req.params.id;
+    const messages = await Message.find({ room: roomId });
     if (!messages) {
       return res.status(404).json({ message: "Item not found" });
     }

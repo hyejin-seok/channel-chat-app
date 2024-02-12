@@ -20,13 +20,6 @@ const initSocketServer = (server) => {
       socket.username = data.user;
       // let __createdtime__ = Date.now();
 
-      // Get all message
-      const messages = await Message.find({ room: data.room });
-      if (!messages) {
-        return res.status(404).json({ message: "Item not found" });
-      }
-      console.log(">>> message here", messages);
-
       // Send message to all clients in room
       io.to(data.room).emit("chat message", {
         msg: `${data.user} has joined the ${data.room}`,

@@ -4,44 +4,35 @@ document.addEventListener("DOMContentLoaded", function () {
   const socket = io();
   const form = document.querySelector("#form");
   const input = document.querySelector("#input");
-  const messages = document.querySelector("#messages");
-
-  // const roomButtons = document.querySelectorAll(".room");
-
+  const messagesContainer = document.querySelector("#messages");
   let currentRoom = "";
 
   input.disabled = true;
   form.querySelector("button").disabled = true;
 
-  // roomButtons.forEach((roomButton) => {
-  //   roomButton.addEventListener("click", function () {
-  //     // Logic to handle room selection
-  //     const roomName = this.value; // Get the room name from button text
-  //     console.log(">>> room value", roomName);
-  //     if (roomName) {
-  //       input.disabled = false;
-  //       form.querySelector("button").disabled = false;
-  //       leaveRoom();
-  //       joinRoom(roomName);
-  //     } else {
-  //       input.disabled = true;
-  //       form.querySelector("button").disabled = true;
-  //       leaveRoom();
-  //     }
-  //   });
-  // });
+  const addMessagesToChatRoom = async (roomId) => {
+    const response = await fetch(`http://localhost:3007/messages/${roomId}`);
+    const messages = await response.json();
+    console.log(">>> all messages of this room:", messages);
+    messages.map((message) => {
+      const { sender, text } = message;
+      messagesContainer.insertAdjacentHTML(
+        "beforeend",
+        `
+        <li>
+          <strong>${sender}</strong>: ${text}
+        </li>
+      `
+      );
+    });
+  };
 
   // roomId, user (1send...client -> server)
-  function joinRoom(newRoom) {
-    currentRoom = newRoom;
-    socket.emit("join room", { room: newRoom, user: username });
+  function joinRoom(roomId) {
+    currentRoom = roomId;
+    addMessagesToChatRoom(roomId);
+    socket.emit("join room", { room: roomId, user: username });
   }
-
-  //     // Redirect the user to a different page
-  //     window.location.href = "/messages/" + newRoom; // Redirect to a URL representing the room
-  //     // window.location.replace(`/messages/${newRoom}`);
-  //   }
-  // });
 
   function leaveRoom() {
     if (currentRoom) {
@@ -50,12 +41,13 @@ document.addEventListener("DOMContentLoaded", function () {
       currentRoom = "";
 
       // Maybe need maybe not??
-      messages.innerHTML = "";
+      messagesContainer.innerHTML = "";
     }
   }
 
   // msg, user, roomId (서버로 보내는 것들)
   form.addEventListener("submit", function (e) {
+    console.log(">>> send message");
     e.preventDefault();
     if (input.value && username) {
       socket.emit("chat message", {
@@ -74,7 +66,7 @@ document.addEventListener("DOMContentLoaded", function () {
       item.textContent = `${data.user}: ${data.msg}`;
       console.log(">>> here", data.room);
       console.log(">>>here2(data is>>)", data);
-      messages.appendChild(item);
+      messagesContainer.appendChild(item);
     }
   });
 
@@ -118,7 +110,6 @@ document.addEventListener("DOMContentLoaded", function () {
         if (roomId) {
           input.disabled = false;
           form.querySelector("button").disabled = false;
-          // window.location.replace(`/messages/${roomId}`);
           leaveRoom();
           joinRoom(roomId);
         } else {
