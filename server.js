@@ -4,17 +4,13 @@ const express = require("express");
 const http = require("http");
 const session = require("express-session");
 const cookieParser = require("cookie-parser");
-const initSocketServer = require("./socketServer");
+const { socketIoHandler } = require("./socketServer");
 const path = require("path");
 
-// Initialize express app and server
 const app = express();
 const server = http.createServer(app);
+const sercureKey = "KeyForCookieParsing";
 
-// Set up key for cookie parsing
-const sercureKey = "adfqef1233afdgadf";
-
-// Configure express app
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 app.use(express.json());
@@ -25,7 +21,7 @@ app.use(express.static("public"));
 // Set up session middleware
 app.use(
   session({
-    secret: "kalsjdfajdsjf",
+    secret: "sercretKeyForSessionIdCookie",
     resave: false,
     saveUninitialized: false,
   })
@@ -74,7 +70,7 @@ app.use((req, res) => {
 });
 
 // Initialize socket server
-initSocketServer(server);
+socketIoHandler(server);
 
 // Set up server to listen on port
 const port = process.env.PORT || 3007;

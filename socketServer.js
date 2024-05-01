@@ -1,6 +1,6 @@
 const socketIO = require("socket.io");
 
-const initSocketServer = (server) => {
+const socketIoHandler = (server) => {
   const io = socketIO(server);
 
   io.on("connection", (socket) => {
@@ -39,4 +39,4 @@ const initSocketServer = (server) => {
   });
 };
 
-module.exports = initSocketServer;
+module.exports = { socketIoHandler };
