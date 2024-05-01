@@ -1,4 +1,4 @@
-@import 'variables.css';
+@import 'index.css';
 
 * {
   margin: 0;
@@ -12,35 +12,11 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    /* background-color: #f4f4f4; */
     background-color: var(--out-color);
-    font-family: Arial, Helvetica, sans-serif;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
-    /* font-family: var(--main-font); */
     color: var(--font-color);
  }
-  
-  
-  
-  /* #messages {
-    display: flex;
-    flex-direction: column;
-    justify-content: end;
-    list-style: none;
-    padding: 20px;
-    height: 300px;
-    overflow-y: auto;
-    border-bottom: 2px solid #eee;
-  } */
-  
-  /* #messages li {
-    padding: 5px 10px;
-    background: #f9f9f9;
-    margin-bottom: 10px;
-    border-radius: 4px;
-  } */
-  
-
+ 
   button {
     padding: 10px 20px;
     border: none;
@@ -57,5 +33,4 @@ body {
   button:hover {
     background-color: var(--font-color);
     color: var(--sidebar-color);
-
   }

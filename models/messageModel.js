@@ -1,5 +1,4 @@
 const mongoose = require("mongoose");
-// const connectChatDB = require("../src/chatDB");
 const { connectDBs } = require("../src/db");
 
 const { chatDB } = connectDBs();

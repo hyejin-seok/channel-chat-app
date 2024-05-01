@@ -1,15 +1,12 @@
-@import 'variables.css';
+@import 'index.css';
 
 .chat-container {
-    /* background-color: var(--bg-color); */
     display: grid;
     grid-template-rows: 88% 12%;
     overflow: auto;
-    /* border: 1px solid yellow; */
 }
 
 #room-selected-content {
-    /* display: grid; */
     grid-template-rows: 88% 12%;
     overflow: auto;
 }
@@ -17,7 +14,6 @@
 
 .chatroom-wrapper {
     padding: 20px;
-    /* border: 1px solid yellow; */
 }
 
 #chat-header {
@@ -32,7 +28,6 @@
     width: 100%;
     height: 93%;
     padding: 20px;
-    /* border: 1px solid white; */
     list-style-type: none;
     overflow: auto;
     background-color: var(--sidebar-color);
@@ -50,7 +45,6 @@
 
 #messages::-webkit-scrollbar-thumb {
     background-color: var(--btn-color);
-    /* width: 1rem; */
     border-radius: 20px;
     border: 6px solid transparent;
     background-clip: content-box
@@ -73,12 +67,10 @@
 }
 
 .form-wrapper {
-    /* border: 1px solid green; */
     width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
-    /* padding: 5px; */
 }
 
  
@@ -92,7 +84,6 @@
 #input {
     padding: 10px;
     margin: 0 10px 0 0;
-    /* border: 1px solid #ddd; */
     border-radius: 5px;
     flex: 1;
     font-size: 1rem;

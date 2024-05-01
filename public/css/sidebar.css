@@ -1,4 +1,4 @@
-@import 'variables.css';
+@import 'index.css';
 
 .sidebar-container {
     width: 100%;
@@ -15,10 +15,8 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    /* border: 1px solid white; */
     background-color: var(--sidebar-color);
     border-radius: 8px;
-    /* box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px; */
     box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
 }
 
@@ -29,7 +27,6 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    /* border: 1px solid pink; */
 }
 
 .room-wrapper button {
@@ -45,7 +42,6 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    /* border: 1px solid pink; */
     padding: 10px 0 ;
     font-size: 1.1rem;
 }
@@ -75,9 +71,6 @@
     color: var(--sidebar-color);
   }
 
-  /* #logoutButton svg {
-    width: 30px;
-    margin-right: 10px;
-  } */
+
   
     

@@ -1,5 +1,5 @@
+// Import required modules
 require("dotenv").config();
-
 const express = require("express");
 const http = require("http");
 const session = require("express-session");
@@ -7,35 +7,33 @@ const cookieParser = require("cookie-parser");
 const initSocketServer = require("./socketServer");
 const path = require("path");
 
+// Initialize express app and server
 const app = express();
 const server = http.createServer(app);
+
+// Set up key for cookie parsing
 const sercureKey = "adfqef1233afdgadf";
 
+// Configure express app
 app.set("view engine", "ejs");
+app.set("views", path.join(__dirname, "views"));
 app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser(sercureKey));
 app.use(express.static("public"));
 
-app.use(express.urlencoded({ extended: false })); // middleware to parse incoming requests with URL-encoded payloads.
 // Set up session middleware
 app.use(
   session({
-    secret: "kalsjdfajdsjf", // Change this to a random string (used to sign the session ID cookie)
-    resave: false, // Avoids saving session if not modified
-    saveUninitialized: false, // Avoids creating sessions for unauthenticated users
+    secret: "kalsjdfajdsjf",
+    resave: false,
+    saveUninitialized: false,
   })
 );
 
-const messageRoutes = require("./routes/messageRoutes");
-const userRoutes = require("./routes/userRoutes");
-const roomRoutes = require("./routes/roomRoutes");
-
-app.set("views", path.join(__dirname, "views"));
-
-// Middleware to pass username session to routes
+// Middleware to capitalize first letter of username
 app.use((req, res, next) => {
   if (req.session.username) {
-    // Capitalize the first letter of the username
     const username =
       req.session.username.charAt(0).toUpperCase() +
       req.session.username.slice(1);
@@ -44,54 +42,42 @@ app.use((req, res, next) => {
   next();
 });
 
-// Middleware to check if user is authenticated
-// const authenticateUser = (req, res, next) => {
-//   if (!req.session.username) {
-//     return res.redirect("/users/login");
-//   }
-//   if (req.cookies.userCookie) {
-//     return next();
-//   }
-//   if (req.path === "/users/login") {
-//     return next();
-//   }
-//   res.redirect("/users/login");
-// };
-
-// Middleware to check if user is authenticated
+// Middleware for user authentication
 const authenticateUser = (req, res, next) => {
   if (!req.session.username) {
-    return res.redirect("/users/login"); // Redirect to login page if user is not authenticated
+    return res.redirect("/users/login");
   }
   if (req.cookies.userCookie) {
-    return next(); // User is authenticated (Proceed to the next middleware or route handler)
+    return next();
   }
-  // If user is authenticated but doesn't have the userCookie, redirect to login page
   res.redirect("/users/login");
 };
 
+// Define routes
+const messageRoutes = require("./routes/messageRoutes");
+const userRoutes = require("./routes/userRoutes");
+const roomRoutes = require("./routes/roomRoutes");
+
 app.get("/", authenticateUser, (req, res) => {
-  // console.log("Username in session:", req.session.username);
   res.render("chatRoom", {
     pageTitle: "Channel Cluster",
-    // username: req.session.username,
   });
-  // res.render("auth/login", { pageTitle: "Login" });
 });
 
 app.use("/users", userRoutes);
 app.use("/messages", authenticateUser, messageRoutes);
 app.use("/rooms", authenticateUser, roomRoutes);
 
-// Catch-all route for invalid requests
+// 404 error handler
 app.use((req, res) => {
   res.status(404).send("Page not found");
 });
 
+// Initialize socket server
 initSocketServer(server);
 
+// Set up server to listen on port
 const port = process.env.PORT || 3007;
-
 server.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
