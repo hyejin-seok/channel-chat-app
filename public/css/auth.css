@@ -1,16 +1,17 @@
-@import 'variables.css';
+@import 'index.css';
 
 .auth-container {
     background-color: var(--sidebar-color);
-    padding: 20px;
+    padding: 30px;
     border-radius: 5px;
-    box-shadow: 0 0 15px rgba(16, 15, 15, 0.7); 
-    width: 350px;
+    box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px;   
+    width: 400px;
     text-align: center;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+
 }
 
 .auth-container h1 {
@@ -39,8 +40,9 @@
 }
 
 .auth-container a {
-    color: var(--btn-color);
+    color: var(--point-color);
     font-size: 1.1rem;
+    text-underline-offset: 3px;
 }
 
 
@@ -98,5 +100,5 @@
 
 .success-message,
 .error-message {
-    color: var(--btn-color);
+    color: var(--point-color);
 }

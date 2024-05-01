@@ -6,21 +6,32 @@
     </div>
 
 
-    <div class="chat-container"> 
+ <!-- Dissplay this content when A chat room is selected -->
+    <div id="room-selected-content">
       <div class="chatroom-wrapper">
-        <div id="chat-header">
-        </div>
-        <ul id="messages">
-        </ul>
+          <div id="chat-header">
+          </div>
+          <ul id="messages">
+          </ul>
       </div>
 
       <div class="form-wrapper">
-        <form id="form" action="">
-          <input type="text" id="input" autocomplete="off" placeholder="Write something..." />
-          <button>Send Message</button>
-        </form>
+          <form id="form" action="">
+            <input type="text" id="input" autocomplete="off" placeholder="Write something..." />
+            <button>Send Message</button>
+          </form>
       </div>
     </div>
+
+    <!-- Display this content when NO chat room is selected -->
+    <div id="room-not-selected-content">
+      <img src="/images/chat-pic.jpg" class="image" alt="chat-picture">
+      <h2>Welcome to "Channel Cluster", <%= username %>! 👋</h2>
+      <p>Please select a Chat Channel from the sidebar to start chatting.</p>
+
+    </div>
+
+
     
 
   </div>

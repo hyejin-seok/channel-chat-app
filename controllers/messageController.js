@@ -1,9 +1,11 @@
 const Message = require("../models/messageModel");
 const User = require("../models/userModel");
 
-// chatRoom Page
+// Render the chatRoom page
 const chatRoom = (req, res) => {
-  res.render("chatRoom", { pageTitle: "ChatRoom" });
+  res.render("chatRoom", {
+    pageTitle: "Channel Cluster - Multiple Real-Time Chat Channels",
+  });
 };
 
 const getMessagesByRoomId = async (req, res) => {
@@ -13,7 +15,6 @@ const getMessagesByRoomId = async (req, res) => {
     if (!messages) {
       return res.status(404).json({ message: "Item not found" });
     }
-    console.log("messages >>>", messages);
     res.json(messages);
   } catch (err) {
     res.status(500).json({ message: err.message });

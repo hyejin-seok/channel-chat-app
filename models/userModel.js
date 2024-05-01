@@ -1,7 +1,5 @@
 const mongoose = require("mongoose");
 const { connectDBs } = require("../src/db");
-// const connectAuthDB = require("../src/authDB");
-
 const { authDB } = connectDBs();
 
 const userSchema = new mongoose.Schema({
