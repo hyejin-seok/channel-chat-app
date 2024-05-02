@@ -9,7 +9,6 @@
     gap: 1rem;
     align-items: center;
     background-color: var(--out-color);
-
 }
 
 .home-container {
@@ -30,7 +29,7 @@
 }
 
 .image {
-    width: 350px; 
+    width: 50%;
     height: auto; 
     border-radius: 8px; 
     opacity: 0.8;
@@ -42,8 +41,29 @@
     color: var(--point-color);
 }
 
-
 #room-not-selected-content p {
     font-size: 1.1rem;
     color: var(--btn-color);
+}
+
+@media screen and (max-width: 920px) {
+    #room-not-selected-content h2 {
+        font-size: 1.2rem;
+    }
+    #room-not-selected-content p {
+        font-size: 0.9rem;
+    }
+}
+
+@media screen and (max-width: 800px) {
+    #room-not-selected-content h2 {
+        font-size: 1rem;
+        text-align: center;
+        padding: 0 5px;
+    }
+    #room-not-selected-content p {
+        font-size: 0.8rem;
+        text-align: center;
+        padding: 0 5px;
+    }
 }
