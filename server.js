@@ -9,7 +9,7 @@ const path = require("path");
 
 const app = express();
 const server = http.createServer(app);
-const sercureKey = "KeyForCookieParsing";
+const sercureKey = process.env.COOKIE_PARSING_SECRET_KEY;
 
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
@@ -21,7 +21,7 @@ app.use(express.static("public"));
 // Set up session middleware
 app.use(
   session({
-    secret: "sercretKeyForSessionIdCookie",
+    secret: process.env.SESSION_ID_SECRET_KEY,
     resave: false,
     saveUninitialized: false,
   })
@@ -69,10 +69,8 @@ app.use((req, res) => {
   res.status(404).send("Page not found");
 });
 
-// Initialize socket server
 socketIoHandler(server);
 
-// Set up server to listen on port
 const port = process.env.PORT || 3007;
 server.listen(port, () => {
   console.log(`Server is running on port ${port}`);

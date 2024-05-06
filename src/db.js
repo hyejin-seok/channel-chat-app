@@ -9,7 +9,7 @@ const connectDBs = () => {
     return { chatDB, authDB };
   } catch (error) {
     console.error(`Error connecting to databases: ${error.message}`);
-    throw error; // Alternatively, re-throw the error to handle it elsewhere
+    throw error;
   }
 };
 
