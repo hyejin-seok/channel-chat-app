@@ -1,4 +1,4 @@
-# Channel Cluster - chat app
+# Channel Cluster - chat
 
 ## Table of contents
 
@@ -10,13 +10,20 @@
 
 ## Description
 
-This is a real-time chat application built using Express.js, EJS, Socket.IO, and MongoDB. Users can join different chat rooms, send and receive messages in real-time, and interact with other users.
+This is a real-time chat application built using Express.js, EJS, Socket.IO, and MongoDB. <br />
+Users can join different chat rooms, send and receive messages in real-time, and interact with other users.
+
+<img width="1405" alt="Screenshot: main page of channel chat app" src="https://github.com/hyejin-seok/channel-chat-app/assets/132785671/4423ccb0-90b5-4a4e-917d-e97fff1c6d0a">
+<img width="1405" alt="Screenshot: chat room page of channel chat app" src="https://github.com/hyejin-seok/channel-chat-app/assets/132785671/2d048397-9ed4-4db2-8634-5bd037a73a92">
 
 ## Features
 
-- Supports secure User Authentication
-- Join and leave different rooms
-- Real-time chat
+- **Secure User Authentication**: <br />
+  &nbsp;Uses bcrypt and cookie sessions to ensure user data is secure.
+- **Multiple Chat Rooms**: <br />
+  &nbsp;Users can join and leave various chat rooms based on their interests.
+- **Real-time Chat**: <br />
+  &nbsp;Built with Socket.IO for live communication without needing to refresh the page.
 
 ## Requirements
 

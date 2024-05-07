@@ -12,7 +12,7 @@ const socketIoHandler = (server) => {
 
     // JOIN room
     socket.on("join room", async (data) => {
-      console.log("what is data>>", data);
+      // console.log("what is data>>", data);
 
       socket.join(data.room);
       console.log(`${data.user} joined ${data.room}`);

@@ -39,3 +39,7 @@ button:hover {
     background-color: var(--font-color);
     color: var(--sidebar-color);
 }
+
+button.selected {
+    background-color: var(--out-color);
+}

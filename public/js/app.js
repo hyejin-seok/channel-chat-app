@@ -1,5 +1,4 @@
 document.addEventListener("DOMContentLoaded", function () {
-  // Constants and variables
   const domain = "http://localhost:3007";
   const socket = io();
   const form = document.querySelector("#form");
@@ -21,22 +20,22 @@ document.addEventListener("DOMContentLoaded", function () {
         .querySelector(".room-wrapper")
         .insertAdjacentHTML(
           "beforeend",
-          `<button class="room" value="${room._id}">${room.name}</button>`
+          `<button class="room" id="${room.name}" value="${room._id}">${room.name}</button>`
         );
     });
 
-    updateUI(null);
+    updateUI(null, null);
 
     // Add event listeners to room buttons
-    const roomButtons = document.querySelectorAll(".room");
-    roomButtons.forEach((roomButton) => {
+    const allRoomButtons = document.querySelectorAll(".room");
+    allRoomButtons.forEach((roomButton) => {
       roomButton.addEventListener("click", function () {
         const roomId = this.value;
-        const buttonText = this.textContent;
+        const roomName = this.id;
         if (roomId) {
           leaveRoom();
-          joinRoom(roomId, buttonText);
-          updateUI(roomId);
+          joinRoom(roomId, roomName);
+          updateUI(roomId, roomName);
         } else {
           leaveRoom();
           updateUI(null);
@@ -65,20 +64,32 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   // Update UI based on room selection
-  function updateUI(roomId) {
+  function updateUI(roomId, roomName) {
     const roomNotSelectedContent = document.getElementById(
       "room-not-selected-content"
     );
     const roomSelectedContent = document.getElementById(
       "room-selected-content"
     );
+    const allRoomsButtons = document.querySelectorAll(".room");
 
     if (!roomId) {
       roomNotSelectedContent.style.display = "flex";
       roomSelectedContent.style.display = "none";
+      allRoomsButtons.forEach((roomButton) =>
+        roomButton.classList.remove("selected")
+      );
     } else {
       roomNotSelectedContent.style.display = "none";
       roomSelectedContent.style.display = "grid";
+      allRoomsButtons.forEach((roomButton) =>
+        roomButton.classList.remove("selected")
+      );
+
+      const selectedRoomButton = document.getElementById(`${roomName}`);
+      if (selectedRoomButton) {
+        selectedRoomButton.classList.add("selected");
+      }
     }
   }
 
