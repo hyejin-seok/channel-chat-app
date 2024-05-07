@@ -57,7 +57,7 @@
     background-color: var(--bg-color);
     color: var(--font-color);
     transition: background-color .3s ease-in-out;
-    font-size: 1rem;
+    font-size: 0.9rem;
     text-decoration: none;
     border: none;
     border-radius: 10px;
@@ -68,6 +68,12 @@
 #logoutButton:hover {
     background-color: var(--font-color);
     color: var(--sidebar-color);
+}
+
+#logout-svg {
+    width: 20px;
+    height: 20px;
+    margin-right: 8px;
 }
 
 @media screen and (max-width: 900px) {
@@ -83,7 +89,13 @@
     #logoutButton {
         width: 95%;
         height: 45px;
-        font-size: 0.9rem;
+        font-size: 0.7rem;
+    }
+
+    #logout-svg {
+        width: 15px;
+        height: 15px;
+        margin-right: 0;
     }
 
     .room-wrapper button {
@@ -98,12 +110,19 @@
 @media screen and (max-width: 500px) {
     #logoutButton {
         width: 100%;
-        font-size: 0.7rem;
         height: 40px;
     }
+    .room-wrapper {
+        width: 90%;
+    }
     .room-wrapper button {
-        font-size: 0.7rem;
+        font-size: 0.8rem;
         height: 40px;
+    }
+}
+@media screen and (max-width: 450px) {
+    #logout-svg {
+        display: none;
     }
 }
 

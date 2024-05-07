@@ -19,7 +19,7 @@ body {
 button {
     padding: 10px 20px;
     border: none;
-    border-radius: 10px;
+    border-radius: 7px;
     background-color: var(--btn-color);
     color: var(--font-color);
     cursor: pointer;

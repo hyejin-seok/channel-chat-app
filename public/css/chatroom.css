@@ -81,7 +81,11 @@ padding-left: 5px;
     height: 65px;
     display: flex;
     padding: 10px;
-  }
+}
+
+#form button {
+    padding: 0 10px;
+}
   
 #input {
     padding: 10px;
@@ -89,12 +93,11 @@ padding-left: 5px;
     border-radius: 5px;
     flex: 1;
     font-size: 1rem;
-  }
+}
   
 @media screen and (max-width: 700px) {
-    #form button {
-        padding: 0 5px;
-        font-size: 0.8rem;
+    .chatroom-wrapper {
+        padding: 10px;
     }
     #messages {
         padding: 10px 10px 5px;
@@ -105,13 +108,24 @@ padding-left: 5px;
     #messages li {
         font-size: 0.9rem;
     }
-}
-
-@media screen and (max-width: 415px) {
-    #form button {
-        font-size: 0.6rem;
+    #input {
+        margin: 0 5px 0 0;
+    }
+    #form {
+        width: 100%;
+        padding: 10px 5px;
     }
 }
+
+@media screen and (max-width: 450px) {
+    #form button {
+        padding: 0 5px;
+    }
+    #input {
+        margin: 0 2px 0 0; 
+    }
+}
+
 
 
 
