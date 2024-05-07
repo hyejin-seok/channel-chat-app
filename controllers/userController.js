@@ -31,6 +31,9 @@ const signupLogic = async (req, res) => {
     });
 
     const addedUser = await newUser.save();
+
+    delete addedUser.hashedPassword;
+
     res.redirect("/users/login");
   } catch (err) {
     res.redirect("/signup");

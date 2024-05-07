@@ -1,4 +1,3 @@
-// Import required modules
 require("dotenv").config();
 const express = require("express");
 const http = require("http");
@@ -8,22 +7,26 @@ const { socketIoHandler } = require("./socketServer");
 const path = require("path");
 
 const app = express();
-const routes = require("./routes");
-const controllers = require("./controllers");
 const server = http.createServer(app);
-const sercureKey = process.env.COOKIE_PARSING_SECRET_KEY;
+
+const COOKIE_PARSING_SECRET_KEY = process.env.COOKIE_PARSING_SECRET_KEY;
+const SESSION_ID_SECRET_KEY = process.env.SESSION_ID_SECRET_KEY;
+const PORT = process.env.PORT || 3007;
+
+const routes = require("./routes");
 
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser(sercureKey));
+app.use(cookieParser(COOKIE_PARSING_SECRET_KEY));
 app.use(express.static("public"));
 
 // Set up session middleware
 app.use(
   session({
-    secret: process.env.SESSION_ID_SECRET_KEY,
+    secret: SESSION_ID_SECRET_KEY,
     resave: false,
     saveUninitialized: false,
   })
@@ -40,24 +43,7 @@ app.use((req, res, next) => {
   next();
 });
 
-// Middleware for user authentication
-const authenticateUser = (req, res, next) => {
-  if (!req.session.username) {
-    return res.redirect("/users/login");
-  }
-  if (req.cookies.userCookie) {
-    return next();
-  }
-  res.redirect("/users/login");
-};
-
-app.get("/", authenticateUser, (req, res) => {
-  res.render("chatRoom", {
-    pageTitle: "Channel Cluster",
-  });
-});
-
-app.use("/api", authenticateUser, routes);
+app.use(routes);
 
 // 404 error handler
 app.use((req, res) => {
@@ -66,7 +52,6 @@ app.use((req, res) => {
 
 socketIoHandler(server);
 
-const port = process.env.PORT || 3007;
-server.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
+server.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
 });
