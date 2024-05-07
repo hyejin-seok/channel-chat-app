@@ -39,32 +39,28 @@
 
 #room-not-selected-content h2 {
     color: var(--point-color);
+    text-align: center;
+    padding: 0 7px;
 }
 
 #room-not-selected-content p {
-    font-size: 1.1rem;
+    font-size: 1.2rem;
     color: var(--btn-color);
+    margin-top: 5px;
+    text-align: center;
+    padding: 0 7px;
+
 }
 
-@media screen and (max-width: 920px) {
+@media screen and (max-width: 1000px) {
     #room-not-selected-content h2 {
-        font-size: 1.2rem;
+        font-size: 1.3rem;
     }
-    #room-not-selected-content p {
-        font-size: 0.9rem;
-    }
-}
 
-@media screen and (max-width: 800px) {
-    #room-not-selected-content h2 {
-        font-size: 1rem;
-        text-align: center;
-        padding: 0 5px;
-    }
     #room-not-selected-content p {
-        font-size: 0.8rem;
+        font-size: 1.1rem;
         text-align: center;
-        padding: 0 5px;
+        padding: 0 7px;
     }
 }
 

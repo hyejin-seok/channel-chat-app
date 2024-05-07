@@ -8,6 +8,8 @@ const { socketIoHandler } = require("./socketServer");
 const path = require("path");
 
 const app = express();
+const routes = require("./routes");
+const controllers = require("./controllers");
 const server = http.createServer(app);
 const sercureKey = process.env.COOKIE_PARSING_SECRET_KEY;
 
@@ -49,20 +51,13 @@ const authenticateUser = (req, res, next) => {
   res.redirect("/users/login");
 };
 
-// Define routes
-const messageRoutes = require("./routes/messageRoutes");
-const userRoutes = require("./routes/userRoutes");
-const roomRoutes = require("./routes/roomRoutes");
-
 app.get("/", authenticateUser, (req, res) => {
   res.render("chatRoom", {
     pageTitle: "Channel Cluster",
   });
 });
 
-app.use("/users", userRoutes);
-app.use("/messages", authenticateUser, messageRoutes);
-app.use("/rooms", authenticateUser, roomRoutes);
+app.use("/api", authenticateUser, routes);
 
 // 404 error handler
 app.use((req, res) => {
