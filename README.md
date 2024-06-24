@@ -6,15 +6,21 @@
 - Features
 - Requirements
 - Installation
-- Author
+- Contributor
 
 ## Description
 
-This is a real-time chat application built using Express.js, EJS, Socket.IO, and MongoDB. <br />
-Users can join different chat rooms, send and receive messages in real-time, and interact with other users.
+This is a real-time chat application built using Express.js, EJS, Socket.IO, MongoDB, and vanilla CSS. <br />
+It was developed entirely with vanilla JavaScript, leveraging EJS for templating and vanilla CSS, without the use of any CSS libraries.
 
-<img width="1405" alt="Screenshot: main page of channel chat app" src="https://github.com/hyejin-seok/channel-chat-app/assets/132785671/4423ccb0-90b5-4a4e-917d-e97fff1c6d0a">
-<img width="1405" alt="Screenshot: chat room page of channel chat app" src="https://github.com/hyejin-seok/channel-chat-app/assets/132785671/2d048397-9ed4-4db2-8634-5bd037a73a92">
+Users can join different chat rooms, send and receive messages in real-time, and interact with other users. 🗣️
+<br /> <br />
+
+[HOME PAGE]
+<img width="1410" alt="Screenshot: home page of channel chat app" src="https://github.com/hyejin-seok/channel-chat-app/assets/132785671/805b921c-6109-4a5c-8fa7-0f0b5cbadca2">
+<br /><br />
+[CHAT ROOM PAGE]
+<img width="1410" alt="Screenshot: chat rooom page of channel chat app" src="https://github.com/hyejin-seok/channel-chat-app/assets/132785671/63f1fecd-7f7e-4ca3-9041-cef38772c1d1">
 
 ## Features
 
@@ -70,6 +76,6 @@ Users can join different chat rooms, send and receive messages in real-time, and
    npm start
    ```
 
-## Author
+## Contributor
 
-[Hyejin](https://github.com/hyejin-seok)
+🌻 [Hyejin](https://github.com/hyejin-seok)
