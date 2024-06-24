@@ -1,31 +1,32 @@
-// Import required modules
 require("dotenv").config();
 const express = require("express");
 const http = require("http");
 const session = require("express-session");
 const cookieParser = require("cookie-parser");
-const initSocketServer = require("./socketServer");
+const { socketIoHandler } = require("./socketServer");
 const path = require("path");
 
-// Initialize express app and server
 const app = express();
 const server = http.createServer(app);
 
-// Set up key for cookie parsing
-const sercureKey = "adfqef1233afdgadf";
+const COOKIE_PARSING_SECRET_KEY = process.env.COOKIE_PARSING_SECRET_KEY;
+const SESSION_ID_SECRET_KEY = process.env.SESSION_ID_SECRET_KEY;
+const PORT = process.env.PORT || 3007;
 
-// Configure express app
+const routes = require("./routes");
+
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser(sercureKey));
+app.use(cookieParser(COOKIE_PARSING_SECRET_KEY));
 app.use(express.static("public"));
 
 // Set up session middleware
 app.use(
   session({
-    secret: "kalsjdfajdsjf",
+    secret: SESSION_ID_SECRET_KEY,
     resave: false,
     saveUninitialized: false,
   })
@@ -42,42 +43,15 @@ app.use((req, res, next) => {
   next();
 });
 
-// Middleware for user authentication
-const authenticateUser = (req, res, next) => {
-  if (!req.session.username) {
-    return res.redirect("/users/login");
-  }
-  if (req.cookies.userCookie) {
-    return next();
-  }
-  res.redirect("/users/login");
-};
-
-// Define routes
-const messageRoutes = require("./routes/messageRoutes");
-const userRoutes = require("./routes/userRoutes");
-const roomRoutes = require("./routes/roomRoutes");
-
-app.get("/", authenticateUser, (req, res) => {
-  res.render("chatRoom", {
-    pageTitle: "Channel Cluster",
-  });
-});
-
-app.use("/users", userRoutes);
-app.use("/messages", authenticateUser, messageRoutes);
-app.use("/rooms", authenticateUser, roomRoutes);
+app.use(routes);
 
 // 404 error handler
 app.use((req, res) => {
   res.status(404).send("Page not found");
 });
 
-// Initialize socket server
-initSocketServer(server);
+socketIoHandler(server);
 
-// Set up server to listen on port
-const port = process.env.PORT || 3007;
-server.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
+server.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
 });

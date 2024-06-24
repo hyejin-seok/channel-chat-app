@@ -1,6 +1,6 @@
 const socketIO = require("socket.io");
 
-const initSocketServer = (server) => {
+const socketIoHandler = (server) => {
   const io = socketIO(server);
 
   io.on("connection", (socket) => {
@@ -12,7 +12,7 @@ const initSocketServer = (server) => {
 
     // JOIN room
     socket.on("join room", async (data) => {
-      console.log("what is data>>", data);
+      // console.log("what is data>>", data);
 
       socket.join(data.room);
       console.log(`${data.user} joined ${data.room}`);
@@ -39,4 +39,4 @@ const initSocketServer = (server) => {
   });
 };
 
-module.exports = initSocketServer;
+module.exports = { socketIoHandler };

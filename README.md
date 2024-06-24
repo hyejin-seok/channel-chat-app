@@ -1,4 +1,4 @@
-# Channel Cluster - chat 
+# Channel Cluster - chat
 
 ## Table of contents
 
@@ -25,11 +25,11 @@ Users can join different chat rooms, send and receive messages in real-time, and
 ## Features
 
 - **Secure User Authentication**: <br />
-&nbsp;Uses bcrypt and cookie sessions to ensure user data is secure.
+  &nbsp;Uses bcrypt and cookie sessions to ensure user data is secure.
 - **Multiple Chat Rooms**: <br />
-&nbsp;Users can join and leave various chat rooms based on their interests.
+  &nbsp;Users can join and leave various chat rooms based on their interests.
 - **Real-time Chat**: <br />
-&nbsp;Built with Socket.IO for live communication without needing to refresh the page.
+  &nbsp;Built with Socket.IO for live communication without needing to refresh the page.
 
 ## Requirements
 

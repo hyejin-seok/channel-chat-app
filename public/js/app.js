@@ -1,11 +1,10 @@
 document.addEventListener("DOMContentLoaded", function () {
-  // Constants and variables
   const domain = "http://localhost:3007";
   const socket = io();
   const form = document.querySelector("#form");
   const input = document.querySelector("#input");
   const messagesContainer = document.querySelector("#messages");
-  const chatHeader = document.querySelector("#chat-header");
+  const chatHeading = document.querySelector("#chat-header");
   let currentRoomId = "";
 
   // Fetch rooms and update UI
@@ -21,22 +20,22 @@ document.addEventListener("DOMContentLoaded", function () {
         .querySelector(".room-wrapper")
         .insertAdjacentHTML(
           "beforeend",
-          `<button class="room" value="${room._id}">${room.name}</button>`
+          `<button class="room" id="${room.name}" value="${room._id}">${room.name}</button>`
         );
     });
 
-    updateUI(null);
+    updateUI(null, null);
 
     // Add event listeners to room buttons
-    const roomButtons = document.querySelectorAll(".room");
-    roomButtons.forEach((roomButton) => {
+    const allRoomButtons = document.querySelectorAll(".room");
+    allRoomButtons.forEach((roomButton) => {
       roomButton.addEventListener("click", function () {
         const roomId = this.value;
-        const buttonText = this.textContent;
+        const roomName = this.id;
         if (roomId) {
           leaveRoom();
-          joinRoom(roomId, buttonText);
-          updateUI(roomId);
+          joinRoom(roomId, roomName);
+          updateUI(roomId, roomName);
         } else {
           leaveRoom();
           updateUI(null);
@@ -65,20 +64,32 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   // Update UI based on room selection
-  function updateUI(roomId) {
+  function updateUI(roomId, roomName) {
     const roomNotSelectedContent = document.getElementById(
       "room-not-selected-content"
     );
     const roomSelectedContent = document.getElementById(
       "room-selected-content"
     );
+    const allRoomsButtons = document.querySelectorAll(".room");
 
     if (!roomId) {
       roomNotSelectedContent.style.display = "flex";
       roomSelectedContent.style.display = "none";
+      allRoomsButtons.forEach((roomButton) =>
+        roomButton.classList.remove("selected")
+      );
     } else {
       roomNotSelectedContent.style.display = "none";
       roomSelectedContent.style.display = "grid";
+      allRoomsButtons.forEach((roomButton) =>
+        roomButton.classList.remove("selected")
+      );
+
+      const selectedRoomButton = document.getElementById(`${roomName}`);
+      if (selectedRoomButton) {
+        selectedRoomButton.classList.add("selected");
+      }
     }
   }
 
@@ -87,7 +98,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const response = await fetch(`${domain}/messages/${roomId}`);
     const messages = await response.json();
 
-    chatHeader.innerHTML = `<h2>&#10077;&nbsp;&nbsp;${roomName}&nbsp;&nbsp;&#10078;</h2>`;
+    chatHeading.innerHTML = `<h2>&#10077;&nbsp;&nbsp;${roomName}&nbsp;&nbsp;&#10078;</h2>`;
     messages.map((message) => {
       const { sender, text } = message;
       const capitalizedSender =
@@ -97,14 +108,19 @@ document.addEventListener("DOMContentLoaded", function () {
         `
         <li>
           <span>🪴 ${capitalizedSender}</span><br>
-          &nbsp;${text} 
+          <p>&nbsp;${text}</p>
         </li>
       `
       );
     });
   };
 
-  // Submit message form
+  // Scroll to the bottom of the messages container
+  function scrollToBottom() {
+    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+  }
+
+  // Submit message form and update UI
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
     if (input.value && username) {
@@ -131,6 +147,7 @@ document.addEventListener("DOMContentLoaded", function () {
           room: currentRoomId,
         });
         input.value = "";
+        scrollToBottom();
       } catch (error) {
         console.error("Error:", error);
       }
@@ -147,10 +164,11 @@ document.addEventListener("DOMContentLoaded", function () {
         `
         <li>
           <span>🪴 ${capitalizedUser}</span><br>
-          &nbsp;${msg}
+          <p>&nbsp;${msg}</p>
         </li>
       `
       );
+      scrollToBottom();
     }
   });
 });
