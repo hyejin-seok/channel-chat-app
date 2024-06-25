@@ -56,6 +56,11 @@ app.use((req, res) => {
     const { chatDB, authDB } = await connectDBs();
     console.log("Connected to databases");
 
+    // Load models after connection
+    require("./models/messageModel")(chatDB);
+    require("./models/roomModel")(chatDB);
+    require("./models/userModel")(authDB);
+
     socketIoHandler(server);
 
     server.listen(PORT, () => {

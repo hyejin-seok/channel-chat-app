@@ -17,7 +17,7 @@ const connectDBs = async () => {
     return { chatDB, authDB };
   } catch (error) {
     console.error(`Error connecting to databases: ${error.message}`);
-    process.exit(1); // Exit process with failure
+    throw error; // Ensure the error is propagated
   }
 };
 
