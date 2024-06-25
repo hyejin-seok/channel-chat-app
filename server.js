@@ -30,6 +30,9 @@ app.use(
     secret: SESSION_ID_SECRET_KEY,
     resave: false,
     saveUninitialized: false,
+    store: MongoStore.create({
+      mongoUrl: process.env.DATABASE_URL_SECONDARY,
+    }),
   })
 );
 
