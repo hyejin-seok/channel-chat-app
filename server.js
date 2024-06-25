@@ -50,8 +50,21 @@ app.use((req, res) => {
   res.status(404).send("Page not found");
 });
 
-socketIoHandler(server);
+// Connect to databases
+connectDBs().then(({ chatDB, authDB }) => {
+  socketIoHandler(server);
 
-server.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+  server.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+  });
+});
+
+// Global error handlers
+process.on("unhandledRejection", (reason, promise) => {
+  console.error("Unhandled Rejection at:", promise, "reason:", reason);
+});
+
+process.on("uncaughtException", (err) => {
+  console.error("Uncaught Exception thrown:", err);
+  process.exit(1);
 });
