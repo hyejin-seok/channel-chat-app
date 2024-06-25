@@ -5,6 +5,7 @@ const session = require("express-session");
 const cookieParser = require("cookie-parser");
 const { socketIoHandler } = require("./socketServer");
 const path = require("path");
+const { connectDBs } = require("./src/db");
 
 const app = express();
 const server = http.createServer(app);
