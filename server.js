@@ -52,6 +52,9 @@ app.use((req, res) => {
 
 // Connect to databases
 connectDBs().then(({ chatDB, authDB }) => {
+  app.locals.chatDB = chatDB;
+  app.locals.authDB = authDB;
+
   socketIoHandler(server);
 
   server.listen(PORT, () => {
