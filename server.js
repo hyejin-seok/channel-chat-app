@@ -51,27 +51,19 @@ app.use((req, res) => {
   res.status(404).send("Page not found");
 });
 
-// Connect to databases and start server
-(async () => {
-  try {
-    const { chatDB, authDB } = await connectDBs();
-    console.log("Connected to databases");
-
-    // Load models after connection
-    require("./models/messageModel")(chatDB);
-    require("./models/roomModel")(chatDB);
-    require("./models/userModel")(authDB);
-
+// Connect to databases
+connectDBs()
+  .then(() => {
     socketIoHandler(server);
 
     server.listen(PORT, () => {
       console.log(`Server is running on port ${PORT}`);
     });
-  } catch (error) {
-    console.error("Failed to connect to databases:", error);
-    process.exit(1);
-  }
-})();
+  })
+  .catch((error) => {
+    console.error(`Failed to connect to databases: ${error.message}`);
+    process.exit(1); // Exit process with failure
+  });
 
 // Global error handlers
 process.on("unhandledRejection", (reason, promise) => {
